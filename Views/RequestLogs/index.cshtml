@@ -229,60 +229,70 @@ body {
   let currentPage = 1;
   const rowsPerPage = 15;
 
-  async function loadRequestLogs() {
-    try {
-      const res = await fetch("/RequestLogs/RequestServer");
-      const data = await res.json();
-      logsData = data;
+async function loadRequestLogs() {
+  try {
+    const res = await fetch("/RequestLogs/RequestServer");
+    const data = await res.json();
+    logsData = data;
+
+    const totalPages = Math.ceil(logsData.length / rowsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages || 1;
+
+    renderPage();
+  } catch (error) {
+    console.error("Failed to load request logs:", error);
+  }
+}
 
 
+ function renderPage() {
+  const tbody = document.getElementById("log-body");
+  tbody.innerHTML = "";
 
-      currentPage = 1; // Reset to first page on refresh
-      renderPage();
-    } catch (error) {
-      console.error("Failed to load request logs:", error);
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const pageData = logsData.slice(start, end);
+
+  pageData.forEach(log => {
+    const tr = document.createElement("tr");
+
+    const statusCode = log["status"] ?? 0;
+    const rawMessage = log["message"];
+    const message = rawMessage?.toString().trim();
+
+    let status, reason;
+
+    if (statusCode === 403) {
+      status = "blocked";
+      reason = "ai";
+    } else if (message && message !== "-") {
+      status = "blocked";
+      reason = "rules";
+    } else {
+      status = "allowed";
+      reason = "none";
     }
-  }
 
-  function renderPage() {
-    const tbody = document.getElementById("log-body");
-    tbody.innerHTML = "";
+    tr.dataset.status = status;
+    tr.dataset.reason = reason;
 
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
- const pageData = logsData.slice(start, end);
+    tr.innerHTML = `
+      <td class="${status === 'blocked' ? 'blocked tag' : 'allowed tag'}">
+        ${status === 'blocked' ? 'Blocked' : 'Allowed'}
+      </td>
+      <td>${log["ip"] ?? "-"}</td>
+      <td>${log["method"] ?? "-"}</td>
+      <td>${log["uri"] ?? "-"}</td>
+      <td>${log["status"] ?? "-"}</td>
+      <td>${log["message"] ?? "-"}</td>
+    `;
 
-pageData.forEach(log => {
-  const tr = document.createElement("tr");
+    tbody.appendChild(tr);
+  });
 
-  const message = log["message"]?.toLowerCase() || "";
-  const isBlocked = message.includes("attack") || log.status === 403;
-
-  tr.dataset.status = isBlocked ? "blocked" : "allowed";
-  tr.dataset.reason = message.includes("rules") ? "rules" : (isBlocked ? "ai" : "none");
-
-  tr.innerHTML = `
-    <td class="${isBlocked ? 'blocked tag' : 'allowed tag'}">
-      ${isBlocked ? 'Blocked' : 'Allowed'}
-    </td>
-    <td>${log["ip"]?? "-"}</td>
-    <td>${log["method"] ?? "-"}</td>
-    <td>${log["uri"] ?? "-"}</td>
-    <td>${log["status"] ?? "-"}</td>
-    <td>${log["message"] ?? "-"}</td>
-  `;
-
-  tbody.appendChild(tr);
-});
-
-
-    
-
-
-    applyCurrentFilter(); // Reapply filter
-    updatePaginationControls();
-  }
-
+  applyCurrentFilter(); // Reapply filter
+  updatePaginationControls();
+}
   function applyCurrentFilter() {
     const activeTab = document.querySelector(".tab.active");
     const filter = activeTab ? activeTab.dataset.filter : "all";
