@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Settings - WAF Security</title>
+    <style>
+        :root {
+            --primary-color: #0d1117;
+            --sidebar-color: #161b22;
+            --button-color: #58a6ff;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #c9d1d9;
+            --border-color: #505559;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .dashboard {
+            display: flex;
+            height: 100vh;
+        }
+
+        .logo {
+            padding-bottom: 30px;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .sidebar {
+            background-color: #161b22;
+            width: 250px;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 17px 0;
+            color: #8b949e;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .sidebar nav a.active::before {
+          content: "•";
+          color: #1e90ff;
+          position: absolute;
+          left: 10px;
+        }
+
+        .sidebar nav a.active,
+        .sidebar nav a:hover {
+            color: #58a6ff;
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            font-size: 24px;
+            background: #21262d;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+
+        .top-controls {
+            position: absolute;
+            top: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            right: 30px;
+        }
+
+        #theme-toggle, #language-toggle {
+            background: #21262d;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Settings specific styles */
+        .settings-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .settings-section {
+            background-color: #161b22;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+        }
+
+        .settings-section h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #58a6ff;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #8b949e;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #238636;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2ea043;
+        }
+
+        .btn-danger {
+            background-color: #da3633;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #f85149;
+        }
+
+        .btn-secondary {
+            background-color: #30363d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #484f58;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .success-message, .error-message {
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: rgba(35, 134, 54, 0.2);
+            border: 1px solid #238636;
+            color: #3fb950;
+        }
+
+        .error-message {
+            background-color: rgba(218, 54, 51, 0.2);
+            border: 1px solid #da3633;
+            color: #f85149;
+        }
+
+        /* Light mode styles */
+        body.light-mode {
+            background-color: #f0f0f0;
+            color: #222;
+        }
+
+        body.light-mode .sidebar {
+            background-color: #e4e4e4;
+        }
+
+        body.light-mode .main,
+        body.light-mode .settings-section {
+            background-color: #fff;
+            color: #222;
+            border-color: #ddd;
+        }
+
+        body.light-mode .form-group input {
+            background-color: #f8f9fa;
+            color: #222;
+            border-color: #ddd;
+        }
+
+        body.light-mode .sidebar nav a {
+            color: #555;
+        }
+
+        body.light-mode .sidebar nav a.active,
+        body.light-mode .sidebar nav a:hover {
+            color: #0366d6;
+        }
+    </style>
+</head>
+<body dir="ltr">
+    <div class="dashboard">
+        <aside class="sidebar">
+            <a href="home.html" class="logo">WAF<span id="logo">Security</span></a>
+               <nav>
+                <a href="/Dashboard/Index">Dashboard</a>
+                <a href="/RequestLogs/Index">Request Logs</a>
+                <a href="/RateLimiting/Index">Rate Limiting</a>
+                <a href="/CustomRule/Index">CustomRule rules</a>
+                <a href="/GeoIP/index">Geo & IP Controls</a>
+                <a href="/Settings/Index">Settings</a>
+                <a href="/Account/Logout">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="top-controls">
+                <button id="theme-toggle" title="Toggle Dark/Light Mode">🌓</button>
+                <select id="language-toggle" title="Switch Language">
+                    <option value="en" selected>English</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+
+            <header class="header">
+                <h1>Account Settings</h1>
+                <div class="avatar">👤</div>
+            </header>
+
+            <div class="settings-container">
+                <div id="success-message" class="success-message"></div>
+                <div id="error-message" class="error-message"></div>
+
+                <div class="settings-section">
+                    <h2>Profile Information</h2>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Enter new username">
+                    </div>
+                    <button id="update-username" class="btn btn-primary">Update Username</button>
+                </div>
+
+                <div class="settings-section">
+                    <h2>Change Password</h2>
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" placeholder="Enter new password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm new password">
+                    </div>
+                    <button id="update-password" class="btn btn-primary">Update Password</button>
+                </div>
+
+                <div class="settings-section">
+                    <h2>Account Actions</h2>
+                    <div class="action-buttons">
+                        <button id="sign-out" class="btn btn-secondary">Sign Out</button>
+                        <button id="unsubscribe" class="btn btn-danger">Unsubscribe Account</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById("theme-toggle");
+        themeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("light-mode");
+        });
+
+        // Language toggle functionality
+        const langToggle = document.getElementById("language-toggle");
+        langToggle.addEventListener("change", (e) => {
+            const selectedLang = e.target.value;
+            if (selectedLang === "ar") {
+                document.body.setAttribute("dir", "rtl");
+                document.body.style.fontFamily = "'Segoe UI', 'Cairo', sans-serif";
+                translateToArabic();
+            } else {
+                document.body.setAttribute("dir", "ltr");
+                document.body.style.fontFamily = "'Segoe UI', sans-serif";
+                translateToEnglish();
+            }
+        });
+
+        function translateToArabic() {
+            document.querySelector(".header h1").textContent = "إعدادات الحساب";
+            document.querySelectorAll(".settings-section h2")[0].textContent = "معلومات الملف الشخصي";
+            document.querySelectorAll(".settings-section h2")[1].textContent = "تغيير كلمة المرور";
+            document.querySelectorAll(".settings-section h2")[2].textContent = "إجراءات الحساب";
+            document.querySelector("#username").placeholder = "أدخل اسم مستخدم جديد";
+            document.querySelector("#current-password").placeholder = "أدخل كلمة المرور الحالية";
+            document.querySelector("#new-password").placeholder = "أدخل كلمة المرور الجديدة";
+            document.querySelector("#confirm-password").placeholder = "تأكيد كلمة المرور الجديدة";
+            document.querySelector("#update-username").textContent = "تحديث اسم المستخدم";
+            document.querySelector("#update-password").textContent = "تحديث كلمة المرور";
+            document.querySelector("#sign-out").textContent = "تسجيل الخروج";
+            document.querySelector("#unsubscribe").textContent = "إلغاء الاشتراك";
+        }
+
+        function translateToEnglish() {
+            document.querySelector(".header h1").textContent = "Account Settings";
+            document.querySelectorAll(".settings-section h2")[0].textContent = "Profile Information";
+            document.querySelectorAll(".settings-section h2")[1].textContent = "Change Password";
+            document.querySelectorAll(".settings-section h2")[2].textContent = "Account Actions";
+            document.querySelector("#username").placeholder = "Enter new username";
+            document.querySelector("#current-password").placeholder = "Enter current password";
+            document.querySelector("#new-password").placeholder = "Enter new password";
+            document.querySelector("#confirm-password").placeholder = "Confirm new password";
+            document.querySelector("#update-username").textContent = "Update Username";
+            document.querySelector("#update-password").textContent = "Update Password";
+            document.querySelector("#sign-out").textContent = "Sign Out";
+            document.querySelector("#unsubscribe").textContent = "Unsubscribe Account";
+        }
+
+        // Settings functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load current username (this would normally come from an API)
+            const currentUsername = "current_user"; // Replace with actual username
+            document.getElementById('username').value = currentUsername;
+
+            // Update username
+            document.getElementById('update-username').addEventListener('click', function() {
+                const newUsername = document.getElementById('username').value.trim();
+                if (!newUsername) {
+                    showMessage('error', 'Username cannot be empty');
+                    return;
+                }
+
+                // Simulate API call
+                setTimeout(() => {
+                    showMessage('success', 'Username updated successfully');
+                    // In a real app, you would update the UI with the new username
+                }, 1000);
+            });
+
+            // Update password
+            document.getElementById('update-password').addEventListener('click', function() {
+                const currentPassword = document.getElementById('current-password').value;
+                const newPassword = document.getElementById('new-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    showMessage('error', 'All password fields are required');
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    showMessage('error', 'New passwords do not match');
+                    return;
+                }
+
+                if (newPassword.length < 8) {
+                    showMessage('error', 'Password must be at least 8 characters');
+                    return;
+                }
+
+                // Simulate API call
+                setTimeout(() => {
+                    showMessage('success', 'Password updated successfully');
+                    // Clear password fields
+                    document.getElementById('current-password').value = '';
+                    document.getElementById('new-password').value = '';
+                    document.getElementById('confirm-password').value = '';
+                }, 1000);
+            });
+
+            // Sign out
+            document.getElementById('sign-out').addEventListener('click', function() {
+                // In a real app, this would redirect to logout endpoint
+                showMessage('success', 'You have been signed out. Redirecting...');
+                setTimeout(() => {
+                    window.location.href = '/Account/Logout';
+                }, 1500);
+            });
+
+            // Unsubscribe
+            document.getElementById('unsubscribe').addEventListener('click', function() {
+                if (confirm('Are you sure you want to unsubscribe? This action cannot be undone.')) {
+                    // Simulate API call
+                    setTimeout(() => {
+                        showMessage('success', 'Account unsubscribed successfully. Redirecting...');
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 1500);
+                    }, 1000);
+                }
+            });
+
+            function showMessage(type, message) {
+                const successEl = document.getElementById('success-message');
+                const errorEl = document.getElementById('error-message');
+
+                if (type === 'success') {
+                    successEl.textContent = message;
+                    successEl.style.display = 'block';
+                    errorEl.style.display = 'none';
+                } else {
+                    errorEl.textContent = message;
+                    errorEl.style.display = 'block';
+                    successEl.style.display = 'none';
+                }
+
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    successEl.style.display = 'none';
+                    errorEl.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

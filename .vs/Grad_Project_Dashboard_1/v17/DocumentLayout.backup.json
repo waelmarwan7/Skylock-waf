@@ -1,0 +1,479 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\models\\api_responseinfoclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:models\\api_responseinfoclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\models\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:models\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\models\\usercustomrule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:models\\usercustomrule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|M:\\jupiter company\\visual studio\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\services\\usersignup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:services\\usersignup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\services\\gcloudmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:services\\gcloudmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\services\\gcloudcleanupservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:services\\gcloudcleanupservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\models\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:models\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\models\\customrule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:models\\customrule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\design\\designtimedbcontextfactory .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:design\\designtimedbcontextfactory .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\service-account.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:service-account.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\grad_project_dashboard_1.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:grad_project_dashboard_1.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\migrations\\20250510004151_addusercustomrulerelation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:migrations\\20250510004151_addusercustomrulerelation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\migrations\\20250512003424_adding4colomns.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:migrations\\20250512003424_adding4colomns.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|m:\\maged zakera\\grad_project_dashboard\\grad_project_dashboard_1\\migrations\\20250511185646_addipinstancetouser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41943729-63AF-47DC-907E-311D1442A287}|Grad_Project_Dashboard_1.csproj|solutionrelative:migrations\\20250511185646_addipinstancetouser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 326,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Api_ResponseInfoClass.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\Api_ResponseInfoClass.cs",
+              "RelativeDocumentMoniker": "Models\\Api_ResponseInfoClass.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\Api_ResponseInfoClass.cs",
+              "RelativeToolTip": "Models\\Api_ResponseInfoClass.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T03:35:18.664Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Views\\Dashboard\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\Index.cshtml",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Views\\Dashboard\\Index.cshtml*",
+              "RelativeToolTip": "Views\\Dashboard\\Index.cshtml*",
+              "ViewState": "AgIAANUAAAAAAAAAAAAAAOwAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-12T02:44:43.464Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "RegisterViewModel.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\RegisterViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\RegisterViewModel.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\RegisterViewModel.cs",
+              "RelativeToolTip": "Models\\RegisterViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T21:58:08.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UserCustomRule.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\UserCustomRule.cs",
+              "RelativeDocumentMoniker": "Models\\UserCustomRule.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\UserCustomRule.cs",
+              "RelativeToolTip": "Models\\UserCustomRule.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T00:35:04.947Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKcAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T22:22:37.664Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T01:22:37.558Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DashboardController.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "Controllers\\DashboardController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T02:28:33.073Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Microsoft.Common.CurrentVersion.targets",
+              "DocumentMoniker": "M:\\jupiter company\\visual studio\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\jupiter company\\visual studio\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "ToolTip": "M:\\jupiter company\\visual studio\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "RelativeToolTip": "..\\..\\..\\jupiter company\\visual studio\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "ViewState": "AgIAAMATAAAAAAAAAAAAAPIUAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-05-12T02:32:40.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "GCloudCleanupService.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Services\\GCloudCleanupService.cs",
+              "RelativeDocumentMoniker": "Services\\GCloudCleanupService.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Services\\GCloudCleanupService.cs",
+              "RelativeToolTip": "Services\\GCloudCleanupService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAgAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T00:24:51.41Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "LoginViewModel.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\LoginViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\LoginViewModel.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\LoginViewModel.cs",
+              "RelativeToolTip": "Models\\LoginViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T21:57:21.084Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "GCloudManager.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Services\\GCloudManager.cs",
+              "RelativeDocumentMoniker": "Services\\GCloudManager.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Services\\GCloudManager.cs",
+              "RelativeToolTip": "Services\\GCloudManager.cs",
+              "ViewState": "AgIAAFoBAAAAAAAAAAAYwA8AAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T00:24:39.655Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UserSignup.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Services\\UserSignup.cs",
+              "RelativeDocumentMoniker": "Services\\UserSignup.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Services\\UserSignup.cs",
+              "RelativeToolTip": "Services\\UserSignup.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T00:23:20.4Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "User.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T21:55:49.323Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CustomRule.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\CustomRule.cs",
+              "RelativeDocumentMoniker": "Models\\CustomRule.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\CustomRule.cs",
+              "RelativeToolTip": "Models\\CustomRule.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-09T23:19:18.92Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Models\\AppDbContext.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Models\\AppDbContext.cs",
+              "RelativeToolTip": "Models\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T22:00:59.251Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "DesignTimeDbContextFactory .cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Design\\DesignTimeDbContextFactory .cs",
+              "RelativeDocumentMoniker": "Design\\DesignTimeDbContextFactory .cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Design\\DesignTimeDbContextFactory .cs",
+              "RelativeToolTip": "Design\\DesignTimeDbContextFactory .cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T02:30:48.574Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-08T10:43:53.129Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "service-account.json",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\service-account.json",
+              "RelativeDocumentMoniker": "service-account.json",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\service-account.json",
+              "RelativeToolTip": "service-account.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-11T06:49:11.338Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Program.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwCEAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T22:29:44.511Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Grad_Project_Dashboard_1.csproj",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj",
+              "RelativeDocumentMoniker": "Grad_Project_Dashboard_1.csproj",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj",
+              "RelativeToolTip": "Grad_Project_Dashboard_1.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-05-07T22:01:47.598Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Views\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\Register.cshtml",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Views\\Account\\Register.cshtml",
+              "RelativeToolTip": "Views\\Account\\Register.cshtml",
+              "ViewState": "AgIAAGMAAAAAAAAAAAAYwHgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-07T22:27:55.004Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\Login.cshtml",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-07T22:26:09.892Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAPAAAAAAAAAAAAAAAFYBAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-30T14:14:17.269Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "site.css",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-04-30T14:31:28.468Z"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 25,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "20250512003424_adding4colomns.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Migrations\\20250512003424_adding4colomns.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250512003424_adding4colomns.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Migrations\\20250512003424_adding4colomns.cs",
+              "RelativeToolTip": "Migrations\\20250512003424_adding4colomns.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T00:34:25.068Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "20250511185646_AddIPInstanceToUser.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Migrations\\20250511185646_AddIPInstanceToUser.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250511185646_AddIPInstanceToUser.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Migrations\\20250511185646_AddIPInstanceToUser.cs",
+              "RelativeToolTip": "Migrations\\20250511185646_AddIPInstanceToUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T18:56:47.314Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "20250510004151_AddUserCustomRuleRelation.cs",
+              "DocumentMoniker": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Migrations\\20250510004151_AddUserCustomRuleRelation.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250510004151_AddUserCustomRuleRelation.cs",
+              "ToolTip": "M:\\maged zakera\\Grad_Project_Dashboard\\Grad_Project_Dashboard_1\\Migrations\\20250510004151_AddUserCustomRuleRelation.cs",
+              "RelativeToolTip": "Migrations\\20250510004151_AddUserCustomRuleRelation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T00:41:51.895Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
