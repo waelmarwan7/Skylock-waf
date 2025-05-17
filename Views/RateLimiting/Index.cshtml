@@ -187,14 +187,16 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", async function (e) {
         e.preventDefault(); // Prevent form refresh
 
-        const data = {
-            requestsPerMinute: parseInt(rpmInput.value),
-            burstCapacity: parseInt(burstInput.value),
-            isEnabled: enabledCheckbox.checked
-        };
+        const isEnabled = enabledCheckbox.checked;
+
+    // Build data to send
+    const data = {
+        requestsPerMinute: isEnabled ? parseInt(rpmInput.value) : 50,
+        burstCapacity: isEnabled ? parseInt(burstInput.value) : 50,
+    };
 
         try {
-            const response = await fetch("/RateLimit/Submit", {
+            const response = await fetch("/RateLimiting/Submit", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
