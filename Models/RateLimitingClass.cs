@@ -4,6 +4,5 @@ namespace Grad_Project_Dashboard_1.Models
     {
         public int RequestsPerMinute { get; set; }
         public int BurstCapacity { get; set; }
-        public bool IsEnabled { get; set; }
     }
 }
