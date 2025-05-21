@@ -3,6 +3,8 @@ using Google.Apis.Compute.v1;
 using Google.Apis.Services;
 using Grad_Project_Dashboard_1.Models;
 using System;
+using System.Text;
+using System.Runtime.InteropServices; // For RuntimeInformation
 using System.Diagnostics;
 namespace Grad_Project_Dashboard_1.Services;
 
@@ -13,7 +15,7 @@ public class GCloudManager
     private string region = "us-central1";
     private string zone = "us-central1-a";
     private string networkName;
-    private string imageName = "ai-integration-logging2-image";
+    private string imageName = "waf-home-image";
     private string instanceGroupName = "my-instance-group";
     private string lbName = "my-load-balancer";
     private string ipName = "lb-static-ip";
@@ -58,14 +60,15 @@ public class GCloudManager
     }
 
 
-    public async Task SetupInfrastructure(string networkName, string userName , string ip_address)
+    public async Task SetupInfrastructure(string networkName, string userName , string ip_address , int id)
     {
         try
         {
             this.networkName = networkName;
             instanceGroupName = $"{userName}-instance-group";
             lbName = $"{userName}-load-balancer";
-
+            ipName = $"{userName}-static-ip";
+            
             // 1. Create Network
             Console.WriteLine($"Creating network: {networkName}");
             CreateNetwork();
@@ -82,9 +85,24 @@ public class GCloudManager
             Console.WriteLine("Configuring firewall rules");
             await CreateFirewallRule();
 
+            // Ensure we have the LB IP before saving
+            int retries = 5;
+            while (retries-- > 0 && string.IsNullOrEmpty(lbIp))
+            {
+                lbIp = GetLoadBalancerIp();
+                if (string.IsNullOrEmpty(lbIp))
+                {
+                    await Task.Delay(5000);
+                }
+            }
+
+            if (string.IsNullOrEmpty(lbIp))
+            {
+                throw new Exception("Failed to retrieve load balancer IP address");
+            }
             
             Console.WriteLine("Infrastructure setup complete!");
-            PutLoadBalancerIp_NetworkName(ip_address);
+            PutLoadBalancerIp_NetworkName(id);
         }
         catch (Exception ex)
         {
@@ -166,13 +184,13 @@ public class GCloudManager
                     $"--allow tcp:80,tcp:443 " +
                     $"--source-ranges 35.191.0.0/16,130.211.0.0/22,209.85.152.0/22,209.85.204.0/22");
 
-        // Rule 6: Deny all other ingress traffic (safety net)
-        ExecuteCommand($"compute firewall-rules create {networkName}-deny-all " +
+        // Rule 6: allow all other ingress traffic
+        ExecuteCommand($"compute firewall-rules create {networkName}-allow-all " +
                     $"--network {networkName} " +
-                    $"--action deny " +
+                    $"--action allow " +
                     $"--rules all " +
                     $"--source-ranges 0.0.0.0/0 " +
-                    $"--priority 2000"); // Lower priority than allow rules
+                    $"--priority 500");
     }
 
     private async Task CreateInstanceGroupAsync(string imageName, string ipAddress)
@@ -192,12 +210,17 @@ public class GCloudManager
 
         string templateName = $"{instanceGroupName}-template";
 
-        // Read the template script
-        string scriptTemplate = await File.ReadAllTextAsync("startup-script.sh");
+        // Read the template script with explicit UTF-8 encoding
+        string scriptTemplate = await File.ReadAllTextAsync("startup-script.sh", Encoding.UTF8);
+
         // Replace the placeholder with the actual IP
-        string finalScript = scriptTemplate.Replace("{{TARGET_IP}}", ipAddress);
+        string finalScript = scriptTemplate.Replace("{{TARGET_IP}}", ipAddress)
+                                        .Replace("\r\n", "\n"); // Ensure Unix line endings
+
         string tempScriptPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sh");
-        await File.WriteAllTextAsync(tempScriptPath, finalScript);
+
+        // Write with UTF-8 encoding without BOM
+        await File.WriteAllTextAsync(tempScriptPath, finalScript, new UTF8Encoding(false));
 
 
         // Then create instance template with subnet - CORRECTED COMMAND
@@ -367,28 +390,16 @@ public class GCloudManager
                         $"--allow=tcp:80,udp,icmp";
         
         ExecuteCommand(allowLbCommand);
-        // First create the ALLOW rule for waf IP
-        string allowWafCommand = $"compute firewall-rules create allow-waf-{instanceGroupName} " +
-                        $"--network={networkName} " +
-                        $"--direction=INGRESS " +
-                        $"--priority=500 " +  // Higher priority than the deny rule
-                        $"--source-ranges={WafIp} " +
-                        $"--target-tags={instanceGroupName} " +
-                        $"--allow=tcp:80,udp,icmp";
+        // // First create the ALLOW rule for waf IP
+        // string allowWafCommand = $"compute firewall-rules create allow-waf-{instanceGroupName} " +
+        //                 $"--network={networkName} " +
+        //                 $"--direction=INGRESS " +
+        //                 $"--priority=500 " +  // Higher priority than the deny rule
+        //                 $"--source-ranges={WafIp} " +
+        //                 $"--target-tags={instanceGroupName} " +
+        //                 $"--allow=tcp:80,udp,icmp";
         
-        ExecuteCommand(allowWafCommand);
-
-        // Then create the DENY rule for all other IPs
-        string denyCommand = $"compute firewall-rules create deny-all-{instanceGroupName} " +
-                        $"--network={networkName} " +
-                        $"--direction=INGRESS " +
-                        $"--priority=2000 " +  // Lower priority than the allow rule
-                        $"--source-ranges=0.0.0.0/0 " +
-                        $"--target-tags={instanceGroupName} " +
-                        $"--action=DENY " +
-                        $"--rules=tcp,udp,icmp";
-        
-        ExecuteCommand(denyCommand);
+        // ExecuteCommand(allowWafCommand);
 
         Console.WriteLine($"Firewall rules created. Only allowing traffic from LB IP: {lbIp}");
     }
@@ -421,6 +432,7 @@ public class GCloudManager
             string ip = process.StandardOutput.ReadToEnd().Trim();
             string error = process.StandardError.ReadToEnd().Trim();
             process.WaitForExit();
+            Console.WriteLine($"LB IP retrieval attempt. IP: {ip}, Error: {error}");
 
             if (process.ExitCode != 0 || string.IsNullOrEmpty(ip))
             {
@@ -474,28 +486,32 @@ public class GCloudManager
         throw new Exception($"Timeout waiting for {resourceType} {resourceName} to be ready");
     }
 
-    public void PutLoadBalancerIp_NetworkName(string ip_address)
+    public void PutLoadBalancerIp_NetworkName(int id)
     {
+        if (string.IsNullOrEmpty(lbIp))
+        {
+            throw new InvalidOperationException("Load balancer IP is not available");
+        }
+
         try
         {
             using (var context = new AppDbContext())
             {
-                var user = context.Users.FirstOrDefault(u => u.IPAddress == ip_address);
-                if (user != null)
-                {
-                    user.IPInstance = lbIp;
-                    user.InstanceGroupName = instanceGroupName;
-                    user.NetworkName = networkName;
-                    user.LoadBalancerName = lbName;
+                    // Assuming you have a User entity with properties for IPInstance, InstanceGroupName, NetworkName, and LoadBalancerName
+                    context.Users.FirstOrDefault(u => u.Id == id).IPInstance = lbIp;
+                    context.Users.FirstOrDefault(u => u.Id == id).InstanceGroupName = instanceGroupName;
+                    context.Users.FirstOrDefault(u => u.Id == id).NetworkName = networkName;
+                    context.Users.FirstOrDefault(u => u.Id == id).LoadBalancerName = lbName;
+
                     context.SaveChanges();
-                    Console.WriteLine($"successfully changes added");
-                }
+                    Console.WriteLine($"Successfully saved LB IP {lbIp} to database");
+                
             }
         }
         catch (Exception ex)
         {
-            // Handle or log the exception
             Console.WriteLine($"Error saving user: {ex.Message}");
+            throw; // Re-throw to ensure caller knows about the failure
         }
     }
 

@@ -12,41 +12,37 @@ namespace Grad_Project_Dashboard_1.Services
     public class Api_ResponseService
     {
         private readonly HttpClient _httpClient;
-
-        // In your service constructor
         private readonly ILogger<Api_ResponseService> _logger;
+        private readonly IDomainProvider _domainProvider;
 
-        public Api_ResponseService(HttpClient httpClient, ILogger<Api_ResponseService> logger)
+        public Api_ResponseService(
+            HttpClient httpClient,
+            ILogger<Api_ResponseService> logger,
+            IDomainProvider domainProvider)
         {
             _httpClient = httpClient;
             _logger = logger;
+            _domainProvider = domainProvider;
         }
 
         public async Task<Api_ResponseInfoClass> GetSecurityDataAsync()
         {
             try
             {
+                var domain = _domainProvider.GetCurrentDomain();
                 var request = new HttpRequestMessage(HttpMethod.Get, "Traffic");
-
-                // Add Host header
                 request.Headers.Host = "34.72.112.1";
-
-                // Optional: Add Accept header if needed
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
 
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
-                
-               var record = System.Text.Json.JsonSerializer.Deserialize<Api_ResponseInfoClass>(content);
-                // Parse the plain text response
-                
-                return record;
+                return System.Text.Json.JsonSerializer.Deserialize<Api_ResponseInfoClass>(content);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"API Call Failed: {ex.Message}");
+                _logger.LogError(ex, "API Call Failed");
                 return new Api_ResponseInfoClass
                 {
                     Allowed = 0,
@@ -54,12 +50,37 @@ namespace Grad_Project_Dashboard_1.Services
                     Blocked_AI = 0
                 };
             }
-
-
-
-
-
         }
+    
+
+            public async Task<List<TopBlockedClass>> GetTopBlockedAsync()
+{
+    try
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "Top-Blocked");
+        request.Headers.Host = "34.72.112.1";
+             Console.WriteLine("==== Outgoing Request ====");
+Console.WriteLine($"Method: {request.Method}");
+Console.WriteLine($"RequestUri: {_httpClient.BaseAddress}{request.RequestUri}");
+Console.WriteLine($"Headers: {request.Headers}");
+Console.WriteLine("===========================");
+
+
+                //request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = await _httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return System.Text.Json.JsonSerializer.Deserialize<List<TopBlockedClass>>(content);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"API Call Failed: {ex.Message}");
+        return new List<TopBlockedClass>();
+    }
+}
+}
 /*
  public async Task<Api_RequestCountClass> GetAllowedRequests()
         {
@@ -224,5 +245,5 @@ namespace Grad_Project_Dashboard_1.Services
             return result;
         }
 */
-    }
+    
 }

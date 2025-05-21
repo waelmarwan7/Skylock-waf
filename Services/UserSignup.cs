@@ -21,7 +21,7 @@ namespace Grad_Project_Dashboard_1.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<SignupResult> ProcessSignupAsync(string email , string ip_address)
+        public async Task<SignupResult> ProcessSignupAsync(string email , string ip_address , int id)
         {
             string userName = email.Split('@')[0].ToLower();
             string networkName = $"{userName}-network";
@@ -31,7 +31,7 @@ namespace Grad_Project_Dashboard_1.Services
                 _logger.LogInformation("Starting infrastructure setup for {UserName}", userName);
                 
                 // Add delay between operations
-                await _gcloudManager.SetupInfrastructure(networkName, userName, ip);
+                await _gcloudManager.SetupInfrastructure(networkName, userName, ip , id);
                 await Task.Delay(10000); // Additional delay after setup
 
                 _logger.LogInformation("Infrastructure setup completed for {UserName}", userName);

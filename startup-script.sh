@@ -1,23 +1,17 @@
 #!/bin/bash
 
-rm /usr/local/openresty/nginx/logs/allowed.log
-rm /usr/local/openresty/nginx/logs/ai_model.log
-rm /usr/local/openresty/nginx/logs/error.log
-rm /usr/local/openresty/nginx/logs/rules_engine.log
-rm /var/log/modsec_audit.log
- 
-touch /usr/local/openresty/nginx/logs/allowed.log
-touch /usr/local/openresty/nginx/logs/ai_model.log
-touch /usr/local/openresty/nginx/logs/error.log
-touch /usr/local/openresty/nginx/logs/rules_engine.log
-touch /var/log/modsec_audit.log
+> /usr/local/openresty/nginx/logs/allowed.log
+> /usr/local/openresty/nginx/logs/ai_model.log
+> /usr/local/openresty/nginx/logs/error.log
+> /usr/local/openresty/nginx/logs/rules_engine.log
+> /var/log/modsec_audit.log
 
 
 # Get the metadata value for target-ip
 TARGET_IP="{{TARGET_IP}}"
 
 
-
+echo "$TARGET_IP" > /tmp/skylock_target_ip.txt
 
 # Validate we got an IP
 if [ -z "$TARGET_IP" ]; then

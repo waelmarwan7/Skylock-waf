@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fu16/OmW+RE=",
+  "dgSpecHash": "LWrzh2PbaT4=",
   "success": true,
-  "projectFilePath": "D:\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj",
+  "projectFilePath": "D:\\dotnet_projects\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

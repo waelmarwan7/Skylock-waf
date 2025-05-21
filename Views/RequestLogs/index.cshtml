@@ -181,7 +181,7 @@ body {
                 <a href="/RequestLogs/Index">Request Logs</a>
                 <a href="/RateLimiting/Index">Rate Limiting</a>
                 <a href="/CustomRule/Index">CustomRule rules</a>
-                <a href="/GeoIP/index">Geo & IP Controls</a>
+                @* <a href="/GeoIP/index">Geo & IP Controls</a> *@
                 <a href="/Settings/Index">Settings</a>
                 <a href="/Account/Logout">Logout</a>
             </nav>
@@ -293,6 +293,8 @@ async function loadRequestLogs() {
   applyCurrentFilter(); // Reapply filter
   updatePaginationControls();
 }
+
+
   function applyCurrentFilter() {
     const activeTab = document.querySelector(".tab.active");
     const filter = activeTab ? activeTab.dataset.filter : "all";

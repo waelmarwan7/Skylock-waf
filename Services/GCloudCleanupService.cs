@@ -47,7 +47,7 @@ namespace Grad_Project_Dashboard_1.Services
                 string networkName = $"{userName}-network";
                 string instanceGroupName = $"{userName}-instance-group";
                 string lbName = $"{userName}-load-balancer";
-                string ipName = "lb-static-ip";
+                string ipName = $"{userName}-static-ip";
 
                 Console.WriteLine($"Starting cleanup for {userName}...");
                 
@@ -184,8 +184,7 @@ namespace Grad_Project_Dashboard_1.Services
                 var allFirewallRules = await ListFirewallRules();
                 var rulesToDelete = allFirewallRules
                     .Where(rule => rule.Contains(networkName) || 
-                        rule.Contains($"allow-lb-{networkName.Replace("-network", "")}") ||
-                        rule.Contains($"deny-all-{networkName.Replace("-network", "")}"))
+                        rule.Contains($"allow-lb-{networkName.Replace("-network", "")}"))
                     .ToList();
 
                 foreach (var rule in rulesToDelete)

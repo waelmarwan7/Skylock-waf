@@ -10,9 +10,9 @@ namespace Grad_Project_Dashboard_1.Controllers
     {
         private readonly RateLimitingService _rateLimitService;
 
-        public RateLimitingController()
+        public RateLimitingController(RateLimitingService rateLimitService)
         {
-            _rateLimitService = new RateLimitingService(); // In production, use dependency injection
+            _rateLimitService = rateLimitService; // In production, use dependency injection
         }
 
         [HttpGet]
@@ -36,6 +36,8 @@ namespace Grad_Project_Dashboard_1.Controllers
                 return  BadRequest(ModelState);
 
             bool success = await _rateLimitService.SendRateLimitSettingsAsync(model);
+
+            Console.WriteLine(success);
         string Message = success ? "Settings sent successfully." : "Failed to send settings.";
 
           return Ok(new { Message });

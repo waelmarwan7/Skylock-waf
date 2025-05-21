@@ -48,36 +48,6 @@ public async Task<List<RequestLogsClass>> GetLogsFromFile(string endpoint)
         return new List<RequestLogsClass>();
     }
 }
-/*
-        private List<RequestLogsClass> ParseLogEntries(string logContent)
-        {
-            var entries = new List<RequestLogsClass>();
 
-            var lines = logContent.Split('\n');
-            var regex = new Regex(@"^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}) (\d{1,3}(?:\.\d{1,3}){3}) GET (.+)$");
-
-            foreach (var line in lines)
-            {
-                if (string.IsNullOrWhiteSpace(line)) continue;
-
-                var match = regex.Match(line);
-                if (match.Success)
-                {
-                    var entry = new RequestLogsClass
-                    {
-                        Timestamp = DateTime.Parse($"{match.Groups[1].Value} {match.Groups[2].Value}"),
-                        IPAddress = match.Groups[3].Value,
-                        Method = "GET",
-                        Path = match.Groups[4].Value,
-                        StatusCode = match.Groups[4].Value.Contains("alert") ? 403 : 200,
-                        Reason = match.Groups[4].Value.Contains("alert") ? "AI" : "-"
-                    };
-
-                    entries.Add(entry);
-                }
-            }
-
-            return entries;
-        }*/
     }
 }

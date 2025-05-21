@@ -21,7 +21,7 @@ namespace Grad_Project_Dashboard_1.Models
         public string IPAddress { get; set; }
         public string DomainName { get; set; }
         // Add this new property
-        public string IPInstance { get; set; } = "NoInstanceIPAdded"; // LoadBalancerIp
+        public string IPInstance { get; set; } = "null-ip";  // LoadBalancerIp
         public string? InstanceGroupName { get; set; }
         public string? LoadBalancerName { get; set; }
         public string? NetworkName { get; set; }

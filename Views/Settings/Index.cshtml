@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @using Microsoft.AspNetCore.Antiforgery
+    @inject IAntiforgery Antiforgery
+
+    @{
+        ViewData["Title"] = "Settings";
+        var token = Antiforgery.GetAndStoreTokens(Context);
+    }
     <meta charset="UTF-8">
     <title>Account Settings - WAF Security</title>
     <style>
@@ -252,6 +259,7 @@
     </style>
 </head>
 <body dir="ltr">
+    
     <div class="dashboard">
         <aside class="sidebar">
             <a href="home.html" class="logo">WAF<span id="logo">Security</span></a>
@@ -260,7 +268,7 @@
                 <a href="/RequestLogs/Index">Request Logs</a>
                 <a href="/RateLimiting/Index">Rate Limiting</a>
                 <a href="/CustomRule/Index">CustomRule rules</a>
-                <a href="/GeoIP/index">Geo & IP Controls</a>
+                @* <a href="/GeoIP/index">Geo & IP Controls</a> *@
                 <a href="/Settings/Index">Settings</a>
                 <a href="/Account/Logout">Logout</a>
             </nav>
@@ -292,6 +300,9 @@
                     </div>
                     <button id="update-username" class="btn btn-primary">Update Username</button>
                 </div>
+
+                
+
 
                 <div class="settings-section">
                     <h2>Change Password</h2>
@@ -379,43 +390,88 @@
             const currentUsername = "current_user"; // Replace with actual username
             document.getElementById('username').value = currentUsername;
 
-            // Update username
-            document.getElementById('update-username').addEventListener('click', function() {
-                const newUsername = document.getElementById('username').value.trim();
-                if (!newUsername) {
-                    showMessage('error', 'Username cannot be empty');
-                    return;
+        // Update username
+        document.getElementById('update-username').addEventListener('click', async function() {
+            const newUsername = document.getElementById('username').value.trim();
+            
+            if (!newUsername) {
+                showMessage('error', 'Username cannot be empty');
+                return;
+            }
+
+            try {
+                const response = await fetch('/Settings/UpdateUsername', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(newUsername)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('success', result.message);
+                } else {
+                    showMessage('error', result.message);
                 }
+            } catch (error) {
+                showMessage('error', 'Failed to update username');
+            }
+        });
 
-                // Simulate API call
-                setTimeout(() => {
-                    showMessage('success', 'Username updated successfully');
-                    // In a real app, you would update the UI with the new username
-                }, 1000);
-            });
+        // Update password
+        document.getElementById('update-password').addEventListener('click', async function() {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
 
-            // Update password
-            document.getElementById('update-password').addEventListener('click', function() {
-                const currentPassword = document.getElementById('current-password').value;
-                const newPassword = document.getElementById('new-password').value;
-                const confirmPassword = document.getElementById('confirm-password').value;
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showMessage('error', 'All password fields are required');
+                return;
+            }
 
-                if (!currentPassword || !newPassword || !confirmPassword) {
-                    showMessage('error', 'All password fields are required');
-                    return;
+            if (newPassword !== confirmPassword) {
+                showMessage('error', 'New passwords do not match');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                showMessage('error', 'Password must be at least 8 characters');
+                return;
+            }
+
+            try {
+                const response = await fetch('/Settings/UpdatePassword', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword,
+                        confirmPassword
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('success', result.message);
+                    document.getElementById('current-password').value = '';
+                    document.getElementById('new-password').value = '';
+                    document.getElementById('confirm-password').value = '';
+                } else {
+                    showMessage('error', result.message);
                 }
+            } catch (error) {
+                showMessage('error', 'Failed to update password');
+            }
+        });
 
-                if (newPassword !== confirmPassword) {
-                    showMessage('error', 'New passwords do not match');
-                    return;
-                }
-
-                if (newPassword.length < 8) {
-                    showMessage('error', 'Password must be at least 8 characters');
-                    return;
-                }
-
-                // Simulate API call
+                @* // Simulate API call
                 setTimeout(() => {
                     showMessage('success', 'Password updated successfully');
                     // Clear password fields
@@ -423,7 +479,7 @@
                     document.getElementById('new-password').value = '';
                     document.getElementById('confirm-password').value = '';
                 }, 1000);
-            });
+            }); *@
 
             // Sign out
             document.getElementById('sign-out').addEventListener('click', function() {

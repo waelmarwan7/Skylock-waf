@@ -14,34 +14,46 @@ namespace Grad_Project_Dashboard_1.Controllers
         {
             _apiService = apiService;
         }
-            
+
 
         public async Task<IActionResult> Index()
         {
-          
-            
+
+
             return View();
 
 
         }
 
-       [HttpGet]
-public async Task<IActionResult> RequestServer()
-{
-    var apiResponse2 = await _apiService.GetSecurityDataAsync();
+        [HttpGet]
+        public async Task<IActionResult> RequestServer()
+        {
+            var apiResponse2 = await _apiService.GetSecurityDataAsync();
 
-    Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(apiResponse2));
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(apiResponse2));
 
 
 
-    return Json(apiResponse2);
-}
+            return Json(apiResponse2);
+        }
+
+
+
+
+
+
+        [HttpGet("Dashboard/TopBlocked")]
+        public async Task<IActionResult> TopBlocked()
+        {
+            var data = await _apiService.GetTopBlockedAsync();
+            return Json(data);
+        }
 
 
 
     }
-
-
 }
+
+
 
 

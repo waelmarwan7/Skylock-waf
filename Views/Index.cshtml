@@ -263,15 +263,24 @@
 
 -->
        <h3>Live Request Distribution</h3>
-<canvas id="pieChart" width="200" height="100"></canvas>
+<canvas id="pieChart" style="width:100 ; height:100"></canvas>
 
 
               <div class="card small">
                   <h3>Top Blocked IPs</h3>
-       <ul id="topBlockedList">
-  <li>Loading...</li>
-</ul>
-
+                  <ul>
+                      @if (ViewData["TopBlockedIPs"] is List<string> topBlockedIPs)
+                      {
+                          foreach (var ip in topBlockedIPs)
+                          {
+                              <li>@ip</li>
+                          }
+                      }
+                      else
+                      {
+                          <li>No data available</li>
+                      }
+                  </ul>
               </div>
 
                 @* <div class="card small">
@@ -406,7 +415,7 @@ async function pollRequests() {
   try {
     const res = await fetch("/Dashboard/RequestServer");
     const data3 = await res.json();
-document.querySelectorAll(".cards .card h2")[0].textContent = data3["Allowed"] + data3["Blocked_RE"] + data3["Blocked_AI"];
+document.querySelectorAll(".cards .card h2")[0].textContent = data3["Allowed"]+data3["Blocked_RE"]+data3["Blocked_AI"];
 document.querySelectorAll(".cards .card h2")[1].textContent = data3["Blocked_RE"];
 document.querySelectorAll(".cards .card h2")[2].textContent = data3["Blocked_AI"];
 
@@ -518,9 +527,6 @@ window.addEventListener("DOMContentLoaded", () => {
   loadTopBlockedIPs();
   setInterval(loadTopBlockedIPs, 10000); // refresh every 10s
 });
-
-
-
 </script>
 
 </body>

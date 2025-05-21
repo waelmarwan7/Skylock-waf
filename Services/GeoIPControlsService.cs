@@ -1,77 +1,134 @@
-// Services/GeoIPControlsService.cs
 using Grad_Project_Dashboard_1.Models;
 using Grad_Project_Dashboard_1.Services;
 using System.Net.Http;
+using Microsoft.Extensions.Logging;
 
 public class GeoIPControlsService
 {
     private readonly List<GeoIPControlsClass> _rules = new();
     private readonly HttpClient _client;
     private readonly GCloudManager _gCloudManager;
+    private readonly ILogger<GeoIPControlsService> _logger;
 
-    public GeoIPControlsService(HttpClient client, GCloudManager gCloudManager)
+    public GeoIPControlsService(
+        HttpClient client, 
+        GCloudManager gCloudManager,
+        ILogger<GeoIPControlsService> logger)
     {
         _client = client;
         _gCloudManager = gCloudManager;
+        _logger = logger;
     }
 
     public void AddRule(GeoIPControlsClass rule)
     {
-        Console.WriteLine("===== GeoIP Rule Info =====");
-        Console.WriteLine($"Rule Name  : {rule.RuleName}");
-        Console.WriteLine($"IPs        : {rule.IPs}");
-        Console.WriteLine($"Countries  : {rule.Countries}");
-        Console.WriteLine($"Priority   : {(rule.Priority.HasValue ? rule.Priority.ToString() : "None")}");
-        Console.WriteLine($"Enabled    : {rule.Enabled}");
-        Console.WriteLine("============================");
+        try
+        {
+            if (rule == null || string.IsNullOrWhiteSpace(rule.RuleName))
+                throw new ArgumentException("Invalid rule data");
 
-        string email = "admin@example.com"; // Replace with actual user email later
-        string action = rule.Enabled ? "deny" : "allow";
-        string priority = rule.Priority?.ToString() ?? "1000";
+            _logger.LogInformation("===== Adding GeoIP Rule =====");
+            _logger.LogInformation($"Rule Name: {rule.RuleName}");
+            _logger.LogInformation($"IPs: {rule.IPs}");
+            _logger.LogInformation($"Countries: {rule.Countries}");
+            _logger.LogInformation($"Priority: {rule.Priority?.ToString() ?? "None"}");
+            _logger.LogInformation($"Enabled: {rule.Enabled}");
 
-        _gCloudManager.ApplyFirewallRule(rule.IPs, email, action, rule.RuleName, priority);
-        _rules.Add(rule);
+            string email = "admin@example.com";
+            string action = rule.Enabled ? "deny" : "allow";
+            string priority = rule.Priority?.ToString() ?? "1000";
+
+            _gCloudManager.ApplyFirewallRule(
+                rule.IPs, 
+                email, 
+                action, 
+                rule.RuleName, 
+                priority);
+
+            _rules.Add(rule);
+            _logger.LogInformation("===== Rule Added Successfully =====");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error adding rule");
+            throw;
+        }
     }
 
     public void EditRule(GeoIPControlsClass rule)
     {
-        Console.WriteLine("=== Editing Rule ===");
-
-        string email = "admin@example.com";
-        string action = rule.Enabled ? "deny" : "allow";
-        string priority = rule.Priority?.ToString() ?? "1000";
-
-        // First delete the old rule
-        _gCloudManager.DeleteFirewallRule(rule.RuleName);
-
-        // Then re-create it with the updated data
-        _gCloudManager.ApplyFirewallRule(rule.IPs, email, action, rule.RuleName, priority);
-
-        // Update internal list
-        var existing = _rules.FirstOrDefault(r => r.RuleName == rule.RuleName);
-        if (existing != null)
+        try
         {
-            existing.IPs = rule.IPs;
-            existing.Countries = rule.Countries;
-            existing.Priority = rule.Priority;
-            existing.Enabled = rule.Enabled;
-        }
+            if (rule == null || string.IsNullOrWhiteSpace(rule.RuleName))
+                throw new ArgumentException("Invalid rule data");
 
-        Console.WriteLine("=== Rule successfully updated ===");
+            _logger.LogInformation($"=== Editing Rule: {rule.RuleName} ===");
+
+            string email = "admin@example.com";
+            string action = rule.Enabled ? "deny" : "allow";
+            string priority = rule.Priority?.ToString() ?? "1000";
+
+            // Delete old rule
+            _gCloudManager.DeleteFirewallRule(rule.RuleName);
+
+            // Create updated rule
+            _gCloudManager.ApplyFirewallRule(rule.IPs, email, action, rule.RuleName, priority);
+
+            // Update local list
+            var existing = _rules.FirstOrDefault(r => r.RuleName == rule.RuleName);
+            if (existing != null)
+            {
+                existing.IPs = rule.IPs;
+                existing.Countries = rule.Countries;
+                existing.Priority = rule.Priority;
+                existing.Enabled = rule.Enabled;
+            }
+
+            _logger.LogInformation("=== Rule Updated Successfully ===");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error editing rule: {rule?.RuleName}");
+            throw;
+        }
     }
 
     public void DeleteRule(string ruleName)
     {
-        Console.WriteLine("=== Deleting Rule ===");
+        try
+        {
+            if (string.IsNullOrWhiteSpace(ruleName))
+                throw new ArgumentNullException(nameof(ruleName));
 
-        _gCloudManager.DeleteFirewallRule(ruleName);
-        _rules.RemoveAll(r => r.RuleName == ruleName);
+            _logger.LogInformation($"=== Deleting Rule: {ruleName} ===");
 
-        Console.WriteLine("=== Deletion completed ===");
+            if (!_rules.Any(r => r.RuleName == ruleName))
+            {
+                _logger.LogWarning($"Rule '{ruleName}' not found in local collection");
+            }
+
+            _gCloudManager.DeleteFirewallRule(ruleName);
+            _rules.RemoveAll(r => r.RuleName == ruleName);
+
+            _logger.LogInformation($"=== Rule '{ruleName}' Deleted Successfully ===");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error deleting rule: {ruleName}");
+            throw;
+        }
     }
 
     public List<GeoIPControlsClass> GetAllRules()
     {
-        return _rules;
+        try
+        {
+            return _rules.ToList();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting all rules");
+            throw;
+        }
     }
 }

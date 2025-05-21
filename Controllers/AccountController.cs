@@ -25,56 +25,39 @@ namespace Grad_Project_Dashboard_1.Controllers
         {
             return View();
         }
+// maged's modification
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Login(LoginViewModel model)
+{
+    if (ModelState.IsValid)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        if (user != null && user.Password == model.Password)
         {
-            if (ModelState.IsValid)
+            var claims = new List<Claim>
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim("IPAddress", user.IPAddress ?? ""),
+                new Claim("IPInstance", user.IPInstance ?? "") // Make sure this exists in your User model
+            };
 
-                if (user != null && user.Password == model.Password) // In production, use password hashing
-                {
-                    // creating session
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Username),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim("IPAddress", user.IPAddress ?? "")
-                    };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    var claimsIdentity = new ClaimsIdentity(
-                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity));
-
-
-                    // Check if the delete checkbox was checked
-                    if (model.DeleteAfterLogin)  // This will be true if checkbox was checked
-                    {
-                        // Delete account logic
-                        //_context.Users.Remove(user);
-                        //await _context.SaveChangesAsync();
-
-                        // Redirect to confirmation page
-                        return RedirectToAction("Remove", new {email = user.Email });
-                    }
-
-                    // Normal login logic for when checkbox wasn't checked
-                    // (Your existing login success code)
-                    //return RedirectToAction("Index", "Home");
-                    return RedirectToAction("Post", new { email = user.Email, ip = user.IPAddress });
-                }
-
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            if (model.DeleteAfterLogin)
+            {
+                return RedirectToAction("Remove", new {email = user.Email });
             }
 
-            return View(model);
+            return RedirectToAction("Index", "Dashboard");
         }
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+    }
+    return View(model);
+}
 
         [HttpGet]
         public IActionResult Register()
@@ -95,12 +78,13 @@ namespace Grad_Project_Dashboard_1.Controllers
                     Password = model.Password, // In production, hash this password
                     IPAddress = model.IPAddress,
                     DomainName = model.DomainName
+
                 };
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Post", new { email = user.Email, ip = user.IPAddress });
+                return RedirectToAction("Post", new { email = user.Email, ip = user.IPAddress , id = user.Id });
                 //return RedirectToAction("Login");
                 // should return to login page agian !!!
             }
@@ -112,17 +96,17 @@ namespace Grad_Project_Dashboard_1.Controllers
         /// </summary>
         // Signup Cloud wise
         [HttpGet]
-        public async Task<IActionResult> Post(string Email , string IPAddress)
+        public async Task<IActionResult> Post(string Email , string IPAddress , int id)
         {
             try
             {
-                var result = await _userSignup.ProcessSignupAsync(Email, IPAddress);
+                var result = await _userSignup.ProcessSignupAsync(Email, IPAddress , id);
 
                 if (result.Success)
                 {
                     return Ok(result);
                 }
-                return BadRequest(result);
+                return RedirectToAction("Login");
             }
             catch (Exception ex)
             {
@@ -137,39 +121,65 @@ namespace Grad_Project_Dashboard_1.Controllers
 
 
         // Clear up Cloud Wise
-        [HttpGet]
-        public async Task<IActionResult> Remove( string Email)
+[HttpGet]
+public async Task<IActionResult> Remove()
+{
+    try
+    {
+        // Get current user's email from claims
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+        
+        if (string.IsNullOrEmpty(email))
         {
-
-            try
+            return BadRequest(new CleanupResult 
             {
-                var result = await _userSignup.CleanupUserResourcesAsync(Email);
-
-                if (result.Success)
-                {
-                    return Ok(result);
-                }
-
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CleanupResult
-                {
-                    Success = false,
-                    Message = "An unexpected error occurred during cleanup",
-                    UserName = Email.Split('@')[0].ToLower()
-                });
-            }
+                Success = false,
+                Message = "User not authenticated"
+            });
         }
 
-
-        [HttpGet]
-        public async Task<IActionResult> Logout()
+        // Find user in database
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return BadRequest(new CleanupResult 
+            {
+                Success = false,
+                Message = "User not found"
+            });
         }
+
+        // Cleanup resources
+        var result = await _userSignup.CleanupUserResourcesAsync(email);
+
+        // Remove user from database
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+
+        // Sign out the user
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        return Ok(result);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new CleanupResult
+        {
+            Success = false,
+            Message = "An unexpected error occurred during cleanup"
+        });
+    }
+}
+
+
+    [HttpGet]
+    public async Task<IActionResult> Logout()
+    {
+        // Sign out of authentication
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        
+        return RedirectToAction("Index", "Home");
+    }
 
         
     }
