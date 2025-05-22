@@ -64,6 +64,8 @@ public class GCloudManager
     {
         try
         {
+                        Console.WriteLine("Email: " + userName);
+                Console.WriteLine("IPAddress: " + ip_address);
             this.networkName = networkName;
             instanceGroupName = $"{userName}-instance-group";
             lbName = $"{userName}-load-balancer";
@@ -209,18 +211,22 @@ public class GCloudManager
 
 
         string templateName = $"{instanceGroupName}-template";
+        
 
-        // Read the template script with explicit UTF-8 encoding
-        string scriptTemplate = await File.ReadAllTextAsync("startup-script.sh", Encoding.UTF8);
+        string templateScriptPath = @"D:\dotnet_projects\Grad_Project_Dashboard_1\startup-script.sh";
+        string tempScriptPath = @"D:\dotnet_projects\Grad_Project_Dashboard_1\TempScript.sh";
 
-        // Replace the placeholder with the actual IP
-        string finalScript = scriptTemplate.Replace("{{TARGET_IP}}", ipAddress)
-                                        .Replace("\r\n", "\n"); // Ensure Unix line endings
+        // Read the template script
+        string scriptContent = File.ReadAllText(templateScriptPath);
 
-        string tempScriptPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sh");
+        // Replace {{TARGET_IP}} with the user's value
+        string modifiedScript = scriptContent.Replace("{{TARGET_IP}}", ipAddress);
 
-        // Write with UTF-8 encoding without BOM
-        await File.WriteAllTextAsync(tempScriptPath, finalScript, new UTF8Encoding(false));
+        // Write the modified script to a temp file
+        File.WriteAllText(tempScriptPath, modifiedScript);
+
+        Console.WriteLine($"Modified script written to {modifiedScript}");
+        Console.WriteLine($"Original ip address: {ipAddress}");
 
 
         // Then create instance template with subnet - CORRECTED COMMAND
@@ -239,9 +245,6 @@ public class GCloudManager
 
         ExecuteCommand(templateCommand);
         await WaitForResource("instance-templates", templateName);
-
-        // Clean up the temporary file
-        File.Delete(tempScriptPath);
 
 
 

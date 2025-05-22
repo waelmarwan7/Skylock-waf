@@ -25,13 +25,14 @@ namespace Grad_Project_Dashboard_1.Services
         {
             string userName = email.Split('@')[0].ToLower();
             string networkName = $"{userName}-network";
-            string ip = ip_address;
+                        Console.WriteLine("Email: " + email);
+                Console.WriteLine("IPAddress: " + ip_address);
             try
             {
                 _logger.LogInformation("Starting infrastructure setup for {UserName}", userName);
-                
+
                 // Add delay between operations
-                await _gcloudManager.SetupInfrastructure(networkName, userName, ip , id);
+                await _gcloudManager.SetupInfrastructure(networkName, userName, ip_address, id);
                 await Task.Delay(10000); // Additional delay after setup
 
                 _logger.LogInformation("Infrastructure setup completed for {UserName}", userName);
@@ -40,7 +41,7 @@ namespace Grad_Project_Dashboard_1.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to setup infrastructure for {UserName}", userName);
-                
+
                 // Enhanced cleanup with retries
                 int retries = 3;
                 while (retries-- > 0)
@@ -52,7 +53,7 @@ namespace Grad_Project_Dashboard_1.Services
                     }
                     catch (Exception cleanupEx)
                     {
-                        _logger.LogError(cleanupEx, $"Cleanup attempt {3-retries} failed for {userName}");
+                        _logger.LogError(cleanupEx, $"Cleanup attempt {3 - retries} failed for {userName}");
                         if (retries > 0) await Task.Delay(10000);
                     }
                 }
