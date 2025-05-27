@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\dotnet_projects\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj": {}
+    "D:\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj": {}
   },
   "projects": {
-    "D:\\dotnet_projects\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj": {
+    "D:\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\dotnet_projects\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj",
+        "projectUniqueName": "D:\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj",
         "projectName": "Grad_Project_Dashboard_1",
-        "projectPath": "D:\\dotnet_projects\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj",
+        "projectPath": "D:\\Grad_Project_Dashboard_1\\Grad_Project_Dashboard_1.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\dotnet_projects\\Grad_Project_Dashboard_1\\obj\\",
+        "outputPath": "D:\\Grad_Project_Dashboard_1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"

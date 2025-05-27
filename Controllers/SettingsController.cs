@@ -4,139 +4,199 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Grad_Project_Dashboard_1.Services;
 
 namespace Grad_Project_Dashboard_1.Controllers
 {
     public class SettingsController : Controller
     {
-        private readonly AppDbContext _context;
-        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly AppDbContext _context = new AppDbContext();
+        private readonly UserSignup _userSignup;
 
-        public SettingsController(AppDbContext context, IPasswordHasher<User> passwordHasher)
+        // Inject both dependencies through constructor
+        public SettingsController(UserSignup userSignup)
         {
-            _context = context;
-            _passwordHasher = passwordHasher;
+            _userSignup = userSignup;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var model = new SettingsViewModel
+            {
+                Username = user.Username
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateUsername(string username)
+        public async Task<IActionResult> UpdateUsername(UsernameUpdateViewModel model)
         {
-            if (string.IsNullOrWhiteSpace(username))
+            if (!ModelState.IsValid)
             {
-                return Json(new { success = false, message = "Username cannot be empty" });
+                // Return current username in the view
+                var settingsView = new SettingsViewModel
+                {
+                    Username = model.Username
+                };
+                return View("Index", settingsView);
             }
 
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
-                return Json(new { success = false, message = "User not found" });
+                return RedirectToAction("Login", "Account");
             }
-
-            // Start transaction
-            using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                user.Username = username;
-                _context.Entry(user).State = EntityState.Modified;
+                user.Username = model.Username;
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
 
-                return Json(new { success = true, message = "Username updated successfully" });
+                TempData["SuccessMessage"] = "Username updated successfully";
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
-                return Json(new { success = false, message = $"Error updating username: {ex.Message}" });
+                TempData["ErrorMessage"] = "Error updating username: " + ex.Message;
+                return View("Index", model);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdatePassword(
-            string currentPassword,
-            string newPassword,
-            string confirmPassword)
+        public async Task<IActionResult> UpdatePassword(PasswordUpdateViewModel model)
         {
-            if (string.IsNullOrEmpty(currentPassword) || string.IsNullOrEmpty(newPassword))
+            if (!ModelState.IsValid)
             {
-                return Json(new { success = false, message = "All password fields are required" });
-            }
-
-            if (newPassword != confirmPassword)
-            {
-                return Json(new { success = false, message = "New passwords do not match" });
-            }
-
-            if (newPassword.Length < 6)
-            {
-                return Json(new { success = false, message = "Password must be at least 6 characters" });
+                // Return current username in the view
+                var currentUser = await GetCurrentUserAsync();
+                var settingsView = new SettingsViewModel
+                {
+                    Username = currentUser?.Username
+                };
+                return View("Index", settingsView);
             }
 
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
-                return Json(new { success = false, message = "User not found" });
+                return RedirectToAction("Login", "Account");
             }
-
-            if (!VerifyPassword(user, currentPassword))
-            {
-                return Json(new { success = false, message = "Current password is incorrect" });
-            }
-
-            using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                user.Password = _passwordHasher.HashPassword(user, newPassword);
-                _context.Entry(user).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
+                if (!VerifyPassword(user, model.CurrentPassword))
+                {
+                    TempData["ErrorMessage"] = "Current password is incorrect";
+                    return View("Index", model);
+                }
 
-                return Json(new { success = true, message = "Password updated successfully" });
+                if (model.NewPassword != model.ConfirmPassword)
+                {
+                    TempData["ErrorMessage"] = "New passwords do not match";
+                    return View("Index", model);
+                }
+
+                user.Password = model.NewPassword;
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Password updated successfully";
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
-                return Json(new { success = false, message = $"Error updating password: {ex.Message}" });
+                TempData["ErrorMessage"] = "Error updating password: " + ex.Message;
+                return View("Index", model);
             }
-        }
-
-        private async Task<User> GetCurrentUserAsync()
-        {
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
-                return null;
-
-            return await _context.Users
-                .AsTracking() // Ensure entity is tracked
-                .FirstOrDefaultAsync(u => u.Id == userId);
         }
 
         private bool VerifyPassword(User user, string providedPassword)
         {
-            var result = _passwordHasher.VerifyHashedPassword(
-                user,
-                user.Password,
-                providedPassword);
-
-            return result == PasswordVerificationResult.Success;
+            return user.Password == providedPassword;
         }
 
-        public class PasswordUpdateModel
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Unsubscribe()
+{
+    // Just show the loading page - the actual unsubscription will happen via JavaScript
+    return View("UnsubscribeLoading");
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Remove()
+{
+    try
+    {
+        Console.WriteLine("this is me hshs");
+        var user = await GetCurrentUserAsync();
+        if (user == null)
         {
-            public string CurrentPassword { get; set; }
-            public string NewPassword { get; set; }
-            public string ConfirmPassword { get; set; }
+            return Json(new { success = false, message = "User not found" });
         }
-        
-        [HttpGet]
-        public async Task<IActionResult> Index()
+
+        // Cleanup resources
+        var result = await _userSignup.CleanupUserResourcesAsync(user.Email);
+
+        // Remove user from database
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+
+        // Sign out the user
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var redirectUrl = Url.Action("Login", "Account", new { message = "You have successfully unsubscribed." });
+        return Json(new { success = true, redirectUrl });
+    }
+    catch (Exception ex)
+    {
+        return Json(new { 
+            success = false, 
+            message = "Error during unsubscription: " + ex.Message,
+            redirectUrl = Url.Action("Index", "Settings") 
+        });
+    }
+}
+
+        private async Task<User> GetCurrentUserAsync()
         {
-            
-            return View(); 
+            // First try to get the user ID from the NameIdentifier claim
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // If not found, try alternative claim names (some schemes use different names)
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                userIdString = User.FindFirst("sub")?.Value; // Alternative claim name
+            }
+
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            {
+                // Log the claims for debugging
+                Console.WriteLine("Available claims:");
+                foreach (var claim in User.Claims)
+                {
+                    Console.WriteLine($"{claim.Type}: {claim.Value}");
+                }
+                return null;
+            }
+
+            return await _context.Users
+                .AsTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId);
         }
+
     }
 }

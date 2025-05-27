@@ -1,3 +1,5 @@
+@using Grad_Project_Dashboard_1.Models;
+@model SettingsViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -263,7 +265,7 @@
     <div class="dashboard">
         <aside class="sidebar">
             <a href="home.html" class="logo">WAF<span id="logo">Security</span></a>
-               <nav>
+            <nav>
                 <a href="/Dashboard/Index">Dashboard</a>
                 <a href="/RequestLogs/Index">Request Logs</a>
                 <a href="/RateLimiting/Index">Rate Limiting</a>
@@ -288,43 +290,60 @@
                 <div class="avatar">👤</div>
             </header>
 
-            <div class="settings-container">
-                <div id="success-message" class="success-message"></div>
-                <div id="error-message" class="error-message"></div>
-
+<div class="settings-container">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    }
                 <div class="settings-section">
                     <h2>Profile Information</h2>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" placeholder="Enter new username">
-                    </div>
-                    <button id="update-username" class="btn btn-primary">Update Username</button>
+                    <form asp-action="UpdateUsername" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label asp-for="Username">Username</label>
+                            <input asp-for="Username" class="form-control" placeholder="Enter new username">
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Username</button>
+                    </form>
                 </div>
-
-                
-
 
                 <div class="settings-section">
                     <h2>Change Password</h2>
-                    <div class="form-group">
-                        <label for="current-password">Current Password</label>
-                        <input type="password" id="current-password" placeholder="Enter current password">
-                    </div>
-                    <div class="form-group">
-                        <label for="new-password">New Password</label>
-                        <input type="password" id="new-password" placeholder="Enter new password">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm-password">Confirm New Password</label>
-                        <input type="password" id="confirm-password" placeholder="Confirm new password">
-                    </div>
-                    <button id="update-password" class="btn btn-primary">Update Password</button>
+                    <form asp-action="UpdatePassword" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label asp-for="CurrentPassword">Current Password</label>
+                            <input asp-for="CurrentPassword" type="password" class="form-control" placeholder="Enter current password">
+                            <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NewPassword">New Password</label>
+                            <input asp-for="NewPassword" type="password" class="form-control" placeholder="Enter new password">
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword">Confirm New Password</label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm new password">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Password</button>
+                    </form>
                 </div>
-
                 <div class="settings-section">
                     <h2>Account Actions</h2>
                     <div class="action-buttons">
-                        <button id="sign-out" class="btn btn-secondary">Sign Out</button>
+                        <a href="/Account/Logout" class="btn btn-secondary">Sign Out</a>
                         <button id="unsubscribe" class="btn btn-danger">Unsubscribe Account</button>
                     </div>
                 </div>
@@ -332,198 +351,67 @@
         </main>
     </div>
 
-    <script>
-        // Theme toggle functionality
-        const themeToggle = document.getElementById("theme-toggle");
-        themeToggle.addEventListener("click", () => {
-            document.body.classList.toggle("light-mode");
-        });
+    <!-- Add validation scripts -->
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script>
+            $(document).ready(function() {
+    // Auto-dismiss alerts after 5 seconds
+    setTimeout(function() {
+        $('.alert').fadeOut('slow');
+    }, 5000);
 
-        // Language toggle functionality
-        const langToggle = document.getElementById("language-toggle");
-        langToggle.addEventListener("change", (e) => {
-            const selectedLang = e.target.value;
-            if (selectedLang === "ar") {
-                document.body.setAttribute("dir", "rtl");
-                document.body.style.fontFamily = "'Segoe UI', 'Cairo', sans-serif";
-                translateToArabic();
-            } else {
-                document.body.setAttribute("dir", "ltr");
-                document.body.style.fontFamily = "'Segoe UI', sans-serif";
-                translateToEnglish();
-            }
-        });
+    // Manual dismiss
+    $('.alert .close').click(function() {
+        $(this).parent().fadeOut('slow');
+    });
+});
 
-        function translateToArabic() {
-            document.querySelector(".header h1").textContent = "إعدادات الحساب";
-            document.querySelectorAll(".settings-section h2")[0].textContent = "معلومات الملف الشخصي";
-            document.querySelectorAll(".settings-section h2")[1].textContent = "تغيير كلمة المرور";
-            document.querySelectorAll(".settings-section h2")[2].textContent = "إجراءات الحساب";
-            document.querySelector("#username").placeholder = "أدخل اسم مستخدم جديد";
-            document.querySelector("#current-password").placeholder = "أدخل كلمة المرور الحالية";
-            document.querySelector("#new-password").placeholder = "أدخل كلمة المرور الجديدة";
-            document.querySelector("#confirm-password").placeholder = "تأكيد كلمة المرور الجديدة";
-            document.querySelector("#update-username").textContent = "تحديث اسم المستخدم";
-            document.querySelector("#update-password").textContent = "تحديث كلمة المرور";
-            document.querySelector("#sign-out").textContent = "تسجيل الخروج";
-            document.querySelector("#unsubscribe").textContent = "إلغاء الاشتراك";
-        }
+$(document).ready(function() {
+            // Auto-dismiss alerts
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
 
-        function translateToEnglish() {
-            document.querySelector(".header h1").textContent = "Account Settings";
-            document.querySelectorAll(".settings-section h2")[0].textContent = "Profile Information";
-            document.querySelectorAll(".settings-section h2")[1].textContent = "Change Password";
-            document.querySelectorAll(".settings-section h2")[2].textContent = "Account Actions";
-            document.querySelector("#username").placeholder = "Enter new username";
-            document.querySelector("#current-password").placeholder = "Enter current password";
-            document.querySelector("#new-password").placeholder = "Enter new password";
-            document.querySelector("#confirm-password").placeholder = "Confirm new password";
-            document.querySelector("#update-username").textContent = "Update Username";
-            document.querySelector("#update-password").textContent = "Update Password";
-            document.querySelector("#sign-out").textContent = "Sign Out";
-            document.querySelector("#unsubscribe").textContent = "Unsubscribe Account";
-        }
-
-        // Settings functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load current username (this would normally come from an API)
-            const currentUsername = "current_user"; // Replace with actual username
-            document.getElementById('username').value = currentUsername;
-
-        // Update username
-        document.getElementById('update-username').addEventListener('click', async function() {
-            const newUsername = document.getElementById('username').value.trim();
-            
-            if (!newUsername) {
-                showMessage('error', 'Username cannot be empty');
-                return;
-            }
-
-            try {
-                const response = await fetch('/Settings/UpdateUsername', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                    },
-                    body: JSON.stringify(newUsername)
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage('success', result.message);
-                } else {
-                    showMessage('error', result.message);
-                }
-            } catch (error) {
-                showMessage('error', 'Failed to update username');
-            }
-        });
-
-        // Update password
-        document.getElementById('update-password').addEventListener('click', async function() {
-            const currentPassword = document.getElementById('current-password').value;
-            const newPassword = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-
-            if (!currentPassword || !newPassword || !confirmPassword) {
-                showMessage('error', 'All password fields are required');
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                showMessage('error', 'New passwords do not match');
-                return;
-            }
-
-            if (newPassword.length < 8) {
-                showMessage('error', 'Password must be at least 8 characters');
-                return;
-            }
-
-            try {
-                const response = await fetch('/Settings/UpdatePassword', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                    },
-                    body: JSON.stringify({
-                        currentPassword,
-                        newPassword,
-                        confirmPassword
-                    })
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage('success', result.message);
-                    document.getElementById('current-password').value = '';
-                    document.getElementById('new-password').value = '';
-                    document.getElementById('confirm-password').value = '';
-                } else {
-                    showMessage('error', result.message);
-                }
-            } catch (error) {
-                showMessage('error', 'Failed to update password');
-            }
-        });
-
-                @* // Simulate API call
-                setTimeout(() => {
-                    showMessage('success', 'Password updated successfully');
-                    // Clear password fields
-                    document.getElementById('current-password').value = '';
-                    document.getElementById('new-password').value = '';
-                    document.getElementById('confirm-password').value = '';
-                }, 1000);
-            }); *@
-
-            // Sign out
-            document.getElementById('sign-out').addEventListener('click', function() {
-                // In a real app, this would redirect to logout endpoint
-                showMessage('success', 'You have been signed out. Redirecting...');
-                setTimeout(() => {
-                    window.location.href = '/Account/Logout';
-                }, 1500);
+            // Manual dismiss
+            $('.alert .close').click(function() {
+                $(this).parent().fadeOut('slow');
             });
 
-            // Unsubscribe
-            document.getElementById('unsubscribe').addEventListener('click', function() {
+            // Unsubscribe button handler
+            $('#unsubscribe').click(function(e) {
+                e.preventDefault();
+                
                 if (confirm('Are you sure you want to unsubscribe? This action cannot be undone.')) {
-                    // Simulate API call
-                    setTimeout(() => {
-                        showMessage('success', 'Account unsubscribed successfully. Redirecting...');
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 1500);
-                    }, 1000);
+                    // Create a form dynamically to submit with anti-forgery token
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/Settings/Unsubscribe';
+                    
+                    var token = document.querySelector('input[name="__RequestVerificationToken"]');
+                    if (token) {
+                        form.appendChild(token.cloneNode());
+                    }
+                    
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             });
 
-            function showMessage(type, message) {
-                const successEl = document.getElementById('success-message');
-                const errorEl = document.getElementById('error-message');
-
-                if (type === 'success') {
-                    successEl.textContent = message;
-                    successEl.style.display = 'block';
-                    errorEl.style.display = 'none';
-                } else {
-                    errorEl.textContent = message;
-                    errorEl.style.display = 'block';
-                    successEl.style.display = 'none';
-                }
-
-                // Hide message after 5 seconds
-                setTimeout(() => {
-                    successEl.style.display = 'none';
-                    errorEl.style.display = 'none';
-                }, 5000);
+            // Check for error in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            if (error) {
+                // Show error message
+                $('.settings-container').prepend(
+                    '<div class="alert alert-danger alert-dismissible fade show">' +
+                    error +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    '</div>'
+                );
             }
         });
-    </script>
+        </script>
+    }
 </body>
 </html>

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Grad_Project_Dashboard_1.Models;
 using Grad_Project_Dashboard_1.Services;
+using System.Text.Json;
 
 namespace Grad_Project_Dashboard_1.Controllers
 {
@@ -19,12 +20,21 @@ namespace Grad_Project_Dashboard_1.Controllers
         {
             _userSignup = userSignup;
         }
-
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string message = null)
         {
+            if (!string.IsNullOrEmpty(message))
+            {
+                TempData["SuccessMessage"] = message;
+            }
             return View();
         }
+
+        public IActionResult Loading()
+        {
+            return View("LoadingPage");
+        }
+
 // maged's modification
 [HttpPost]
 [ValidateAntiForgeryToken]
@@ -39,13 +49,15 @@ public async Task<IActionResult> Login(LoginViewModel model)
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Email, user.Email ?? ""),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // This is the crucial line
                 new Claim("IPAddress", user.IPAddress ?? ""),
-                new Claim("IPInstance", user.IPInstance ?? "") // Make sure this exists in your User model
+                new Claim("IPInstance", user.IPInstance ?? "")
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+                new ClaimsPrincipal(claimsIdentity));
 
             if (model.DeleteAfterLogin)
             {
@@ -65,59 +77,62 @@ public async Task<IActionResult> Login(LoginViewModel model)
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Register(RegisterViewModel model)
+{
+    if (ModelState.IsValid)
+    {
+        // Store the registration data in TempData to use after showing loading page
+        TempData["RegisterModel"] = JsonSerializer.Serialize(model);
+        return View("LoadingPage");
+    }
+    return View(model);
+}
+
+[HttpGet]
+public async Task<IActionResult> ProcessRegistration()
+{
+    if (!TempData.ContainsKey("RegisterModel"))
+    {
+        TempData["ErrorMessage"] = "Registration data not found. Please try again.";
+        return RedirectToAction("Register");
+    }
+
+    try
+    {
+        var model = JsonSerializer.Deserialize<RegisterViewModel>(TempData["RegisterModel"].ToString());
+        
+        var user = new User
         {
-            if (ModelState.IsValid)
-            {
-                var user = new User
-                {
-                    Username = model.Username,
-                    Email = model.Email,
-                    Password = model.Password, // In production, hash this password
-                    IPAddress = model.IPAddress,
-                    DomainName = model.DomainName
+            Username = model.Username,
+            Email = model.Email,
+            Password = model.Password,
+            IPAddress = model.IPAddress,
+            DomainName = model.DomainName
+        };
 
-                };
-
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Post", new { email = user.Email, ip = user.IPAddress , id = user.Id });
-                //return RedirectToAction("Login");
-                // should return to login page agian !!!
-            }
-
-            return View(model);
-        }
-        /// <summary>
-        /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// </summary>
-        // Signup Cloud wise
-        [HttpGet]
-        public async Task<IActionResult> Post(string Email , string IPAddress , int id)
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+        
+        // Process the signup
+        var result = await _userSignup.ProcessSignupAsync(user.Email, user.IPAddress, user.Id);
+        
+        if (result.Success)
         {
-            try
-            {
-                var result = await _userSignup.ProcessSignupAsync(Email, IPAddress , id);
-
-                if (result.Success)
-                {
-                    return Ok(result);
-                }
-                return RedirectToAction("Login");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new SignupResult
-                {
-                    Success = false,
-                    Message = "An unexpected error occurred during signup",
-                    UserName = Email.Split('@')[0].ToLower()
-                });
-            }
+            TempData["SuccessMessage"] = "Registration successful! Please login with your credentials.";
+            return RedirectToAction("Login");
         }
+        
+        TempData["ErrorMessage"] = "Registration failed. Please try again.";
+        return RedirectToAction("Register");
+    }
+    catch (Exception ex)
+    {
+        TempData["ErrorMessage"] = "An error occurred during registration. Please try again.";
+        return RedirectToAction("Register");
+    }
+}
 
 
         // Clear up Cloud Wise
