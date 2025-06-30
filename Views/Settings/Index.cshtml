@@ -1,0 +1,516 @@
+@using Grad_Project_Dashboard_1.Models;
+@model SettingsViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @using Microsoft.AspNetCore.Antiforgery
+    @inject IAntiforgery Antiforgery
+
+    @{
+        ViewData["Title"] = "Settings";
+        var token = Antiforgery.GetAndStoreTokens(Context);
+    }
+    <meta charset="UTF-8">
+    <title>Account Settings - WAF Security</title>
+    <style>
+        :root {
+            --primary-color: #0d1117;
+            --sidebar-color: #161b22;
+            --button-color: #58a6ff;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #c9d1d9;
+            --border-color: #505559;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .dashboard {
+            display: flex;
+            height: 100vh;
+        }
+
+        .logo {
+            padding-bottom: 30px;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .sidebar {
+            background-color: #161b22;
+            width: 250px;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 17px 0;
+            color: #8b949e;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .sidebar nav a.active::before {
+          content: "•";
+          color: #1e90ff;
+          position: absolute;
+          left: 10px;
+        }
+
+        .sidebar nav a.active,
+        .sidebar nav a:hover {
+            color: #58a6ff;
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            font-size: 24px;
+            background: #21262d;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+
+        .top-controls {
+            position: absolute;
+            top: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            right: 30px;
+        }
+
+        #theme-toggle, #language-toggle {
+            background: #21262d;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Settings specific styles */
+        .settings-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .settings-section {
+            background-color: #161b22;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+        }
+
+        .settings-section h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #58a6ff;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #8b949e;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #238636;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2ea043;
+        }
+
+        .btn-danger {
+            background-color: #da3633;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #f85149;
+        }
+
+        .btn-secondary {
+            background-color: #30363d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #484f58;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .success-message, .error-message {
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: rgba(35, 134, 54, 0.2);
+            border: 1px solid #238636;
+            color: #3fb950;
+        }
+
+        .error-message {
+            background-color: rgba(218, 54, 51, 0.2);
+            border: 1px solid #da3633;
+            color: #f85149;
+        }
+
+        /* Light mode styles */
+        body.light-mode {
+            background-color: #f0f0f0;
+            color: #222;
+        }
+
+        body.light-mode .sidebar {
+            background-color: #e4e4e4;
+        }
+
+        body.light-mode .main,
+        body.light-mode .settings-section {
+            background-color: #fff;
+            color: #222;
+            border-color: #ddd;
+        }
+
+        body.light-mode .form-group input {
+            background-color: #f8f9fa;
+            color: #222;
+            border-color: #ddd;
+        }
+
+        body.light-mode .sidebar nav a {
+            color: #555;
+        }
+
+        body.light-mode .sidebar nav a.active,
+        body.light-mode .sidebar nav a:hover {
+            color: #0366d6;
+        }
+        /* Add to your CSS */
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#aiToggleBtn {
+    transition: all 0.3s ease;
+}
+    </style>
+</head>
+<body dir="ltr">
+    
+    <div class="dashboard">
+        <aside class="sidebar">
+            <a href="home.html" class="logo">WAF<span id="logo">Security</span></a>
+            <nav>
+                <a href="/Dashboard/Index">Dashboard</a>
+                <a href="/RequestLogs/Index">Request Logs</a>
+                <a href="/RateLimiting/Index">Rate Limiting</a>
+                <a href="/CustomRule/Index">CustomRule rules</a>
+                <a href="/UserDomains/Index">Domains Control</a>
+                <a href="/Settings/Index">Settings</a>
+                <a href="/Account/Logout">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="top-controls">
+                <button id="theme-toggle" title="Toggle Dark/Light Mode">🌓</button>
+                <select id="language-toggle" title="Switch Language">
+                    <option value="en" selected>English</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+
+            <header class="header">
+                <h1>Account Settings</h1>
+                <div class="avatar">👤</div>
+            </header>
+
+<div class="settings-container">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    }
+                <div class="settings-section">
+                    <h2>Profile Information</h2>
+                    <form asp-action="UpdateUsername" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label asp-for="Username">Username</label>
+                            <input asp-for="Username" class="form-control" placeholder="Enter new username">
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Username</button>
+                    </form>
+                </div>
+
+                <div class="settings-section">
+                    <h2>Change Password</h2>
+                    <form asp-action="UpdatePassword" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label asp-for="CurrentPassword">Current Password</label>
+                            <input asp-for="CurrentPassword" type="password" class="form-control" placeholder="Enter current password">
+                            <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NewPassword">New Password</label>
+                            <input asp-for="NewPassword" type="password" class="form-control" placeholder="Enter new password">
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword">Confirm New Password</label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm new password">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Password</button>
+                    </form>
+                </div>
+                <div class="settings-section">
+                    <h2>AI Protection</h2>
+                    <div class="action-buttons">
+                        <button id="aiToggleBtn" class="btn btn-success">Disable AI Protection</button>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h2>Account Actions</h2>
+                    <div class="action-buttons">
+                        <a href="/Account/Logout" class="btn btn-secondary">Sign Out</a>
+                        <button id="unsubscribe" class="btn btn-danger">Unsubscribe Account</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add validation scripts -->
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script>
+            $(document).ready(function() {
+    // Auto-dismiss alerts after 5 seconds
+    setTimeout(function() {
+        $('.alert').fadeOut('slow');
+    }, 5000);
+
+    // Manual dismiss
+    $('.alert .close').click(function() {
+        $(this).parent().fadeOut('slow');
+    });
+});
+
+$(document).ready(function() {
+            // Auto-dismiss alerts
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+
+            // Manual dismiss
+            $('.alert .close').click(function() {
+                $(this).parent().fadeOut('slow');
+            });
+
+            // Unsubscribe button handler
+            $('#unsubscribe').click(function(e) {
+                e.preventDefault();
+                
+                if (confirm('Are you sure you want to unsubscribe? This action cannot be undone.')) {
+                    // Create a form dynamically to submit with anti-forgery token
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/Settings/Unsubscribe';
+                    
+                    var token = document.querySelector('input[name="__RequestVerificationToken"]');
+                    if (token) {
+                        form.appendChild(token.cloneNode());
+                    }
+                    
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+
+            // Check for error in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            if (error) {
+                // Show error message
+                $('.settings-container').prepend(
+                    '<div class="alert alert-danger alert-dismissible fade show">' +
+                    error +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    '</div>'
+                );
+            }
+
+    // AI Toggle Functionality
+    let aiEnabled = true; // Default to enabled (true)
+    updateAiButton();
+
+    // Get initial state from server
+    $.get('/Settings/GetAIStatus', function(response) {
+        aiEnabled = response.enabled;
+        updateAiButton();
+    }).fail(function() {
+        showAlert('Failed to load AI protection status', 'danger');
+    });
+
+    // AI toggle button handler
+    $('#aiToggleBtn').click(function(e) {
+        e.preventDefault();
+        const newState = !aiEnabled;
+        console.log(aiEnabled);
+        toggleAIStatus(newState);
+    });
+
+    function updateAiButton() {
+        const btn = $('#aiToggleBtn');
+        if (aiEnabled) {
+            btn.text('Disable AI Protection');
+            btn.removeClass('btn-success').addClass('btn-danger');
+        } else {
+            btn.text('Enable AI Protection');
+            btn.removeClass('btn-danger').addClass('btn-success');
+        }
+    }
+
+function toggleAIStatus(enabled) {
+    $.ajax({
+        url: '/Settings/ToggleAI',
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+        },
+        data: JSON.stringify({
+            enable: enabled // Send the actual desired state, not the negation
+        }),
+        success: function(response) {
+            aiEnabled = enabled;
+            updateAiButton();
+            showAlert('AI protection ' + (enabled ? 'enabled' : 'disabled'), 'success');
+        },
+        error: function(xhr) {
+            showAlert('Failed to update AI status: ' + xhr.responseText, 'danger');
+        }
+    });
+}
+
+    function showAlert(message, type) {
+        // Remove any existing alerts of the same type
+        $('.alert-' + type).remove();
+        
+        // Add new alert
+        $('.settings-container').prepend(
+            '<div class="alert alert-' + type + ' alert-dismissible fade show">' +
+            message +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '</div>'
+        );
+        
+        // Auto-dismiss after 5 seconds
+        setTimeout(function() {
+            $('.alert-' + type).fadeOut('slow', function() {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+});
+        </script>
+    }
+</body>
+</html>

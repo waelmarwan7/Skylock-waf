@@ -1,0 +1,173 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Processing Unsubscription - Please Wait</title>
+    <style>
+        /* Same styles as you had */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .loading-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 2rem;
+        }
+
+        .loading-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .spinner-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 8px solid transparent;
+            border-radius: 50%;
+            border-top-color: rgba(255, 255, 255, 0.8);
+            animation: spin 1.5s linear infinite;
+        }
+
+        .spinner-circle-2 {
+            border-top-color: rgba(255, 255, 255, 0.4);
+            animation: spinReverse 2s linear infinite;
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+        }
+
+        .loading-message {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            opacity: 0.8;
+            animation: pulse 2s infinite;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: white;
+            border-radius: 3px;
+            animation: progressAnimation 5s ease-in-out infinite;
+        }
+
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @@keyframes spinReverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        @@keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @@keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        @@keyframes progressAnimation {
+            0% { width: 0%; }
+            50% { width: 80%; }
+            100% { width: 100%; }
+        }
+
+        @@media (max-width: 600px) {
+            .loading-title { font-size: 1.5rem; }
+            .loading-message { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <h1 class="loading-title">Account Unsubscription</h1>
+        <div class="loading-spinner">
+            <div class="spinner-circle"></div>
+            <div class="spinner-circle spinner-circle-2"></div>
+        </div>
+        <p class="loading-message">Processing your request...</p>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- Hidden form just to generate anti-forgery token -->
+    <form id="antiForgeryForm" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (!tokenInput) {
+                console.error("Anti-forgery token not found.");
+                return;
+            }
+
+            const token = tokenInput.value;
+
+            fetch('/Settings/Remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token
+                },
+                body: JSON.stringify({}) // no need to include the token in the body
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    window.location.href = data.redirectUrl + '?error=' + encodeURIComponent(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = '/Settings/Index?error=An unexpected error occurred';
+            });
+        });
+    </script>
+</body>
+</html>

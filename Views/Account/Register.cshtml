@@ -1,0 +1,157 @@
+﻿@model Grad_Project_Dashboard_1.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+<style>
+    .pb-3 {
+        display: flex;
+        justify-content: center; /* center horizontally */
+        align-items: center; /* center vertically */
+        height: 100vh; /* full viewport height */
+        flex-direction: column; /* stack items vertically */
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #0d1117;
+        color: #c9d1d9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .signup-container {
+        text-align: center;
+        max-width: 360px;
+        width: 100%;
+    }
+
+    .logo .icon {
+        font-size: 40px;
+        margin-bottom: 5px;
+    }
+
+    .logo h2 {
+        color: #8b949e;
+        font-weight: bold;
+        font-size: 18px;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+    }
+
+    .signup-form {
+        background: none;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+        .signup-form h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .signup-form input[type="text"],
+        .signup-form input[type="email"],
+        .signup-form input[type="password"] {
+            position: relative;
+            right: 15px;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .signup-form a {
+            color: #8b949e;
+            text-decoration: none;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .signup-form button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #3470DCff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s ease;
+        }
+
+            .signup-form button:hover {
+                background-color:   #2ea043;
+            }
+</style>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        @TempData["ErrorMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<div class="signup-container">
+    <div class="logo">
+        <div class="icon">🖥</div>
+        <h2>WEB APP FIREWALL</h2>
+    </div>
+    <form asp-action="Register" method="post" class="signup-form">
+        <h3>Sign in for an account</h3>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input asp-for="Username" placeholder="Username" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+
+        <input asp-for="Email" placeholder="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+
+        <input asp-for="Password" placeholder="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+
+        <input asp-for="ConfirmPassword" placeholder="Confirm Password" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+        <a href="/Account/Login">Already have an account?</a>
+        <button type="submit">Sign Up</button>
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Disable the button to prevent multiple submissions
+            document.getElementById('registerButton').disabled = true;
+            
+            // Submit the form normally (will show loading page)
+            this.submit();
+        });
+                // Auto-dismiss alert after 5 seconds
+        setTimeout(function() {
+            $('.alert').alert('close');
+        }, 5000);
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('registerButton').disabled = true;
+            this.submit();
+        });
+    </script>
+}

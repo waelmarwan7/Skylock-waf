@@ -1,0 +1,182 @@
+﻿@model Grad_Project_Dashboard_1.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    .pb-3{
+        display: flex;
+        justify-content: center; /* center horizontally */
+        align-items: center; /* center vertically */
+        height: 100vh; /* full viewport height */
+        flex-direction: column; /* stack items vertically */
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #0d1117;
+        color: #c9d1d9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .login-container {
+        text-align: center;
+        max-width: 360px;
+        width: 100%;
+    }
+
+    .logo .icon {
+        font-size: 40px;
+        margin-bottom: 5px;
+    }
+
+    .logo h2 {
+        color: #8b949e;
+        font-weight: bold;
+        font-size: 18px;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+    }
+
+    .login-form {
+        background: none;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+        .login-form h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            position: relative;
+            right: 15px;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .login-form .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 20px;
+            color: #8b949e;
+        }
+
+            .login-form .options input[type="checkbox"] {
+                margin-right: 5px;
+                transform: scale(1.1);
+            }
+
+            .login-form .options a {
+                color: #8b949e;
+                text-decoration: none;
+            }
+
+        .login-form a {
+            color: #8b949e;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .login-form button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #3470DCff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s ease;
+        }
+
+            .login-form button:hover {
+                background-color:   #2ea043;
+            }
+    .form-check {
+        margin: 15px 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-check-input {
+        margin-right: 10px;
+    }
+
+    .form-check-label {
+        margin-bottom: 0;
+        cursor: pointer;
+    }
+</style>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        @TempData["SuccessMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        @TempData["ErrorMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="login-container">
+    <div class="logo">
+        <div class="icon">🖥</div>
+        <h2>WEB APP FIREWALL</h2>
+    </div>
+    <form asp-action="Login" method="post" class="login-form">
+        <h3>Log in to your account</h3>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input asp-for="Username" placeholder="Username" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+
+        <input asp-for="Password" placeholder="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+
+
+        <a asp-action="Register">First time using the app?</a>
+        <button type="submit">Log In</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Auto-dismiss alert after 5 seconds
+        setTimeout(function() {
+            $('.alert').alert('close');
+        }, 5000);
+    </script>
+}

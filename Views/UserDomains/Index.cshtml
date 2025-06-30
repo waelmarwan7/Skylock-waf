@@ -1,0 +1,501 @@
+@model User
+@{
+    ViewData["Title"] = "My IP & Domains";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>My IP & Domains</title>
+<style>
+    .modal {
+    display: none;
+    position: fixed;
+    /* rest of your modal styles */
+}
+    :root {
+        --primary-color: #0d1117;
+        --sidebar-color: #161b22;
+        --button-color: #58a6ff;
+        --secondary-color: #3498db;
+        --accent-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+        --text-color: #c9d1d9;
+        --border-color: #505559;
+    }
+
+    body {
+        background-color: var(--primary-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dashboard {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px;
+        background: var(--sidebar-color);
+        padding: 20px;
+        position: fixed;
+        height: 100%;
+    }
+
+    .logo {
+        display: block;
+        padding-bottom: 30px;
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+    }
+    .ai-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    }
+
+    .ai-status.enabled {
+        background-color: #2d4336;
+        color: #7ee787;
+    }
+
+    .ai-status.disabled {
+        background-color: #3c2f2f;
+        color: #ff7b72;
+    }
+
+    .logo span {
+        color: var(--secondary-color);
+    }
+
+    .sidebar nav a {
+        display: block;
+        padding: 12px 0;
+        color: #8b949e;
+        text-decoration: none;
+        font-size: 16px;
+        transition: color 0.3s;
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+        color: var(--button-color);
+    }
+
+    .main-content {
+        flex: 1;
+        padding: 30px;
+        margin-left: 250px;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .create-btn {
+        background-color: var(--button-color);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .create-btn:hover {
+        background-color: #2a5bb1;
+    }
+
+    .alert {
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+
+    .alert-success {
+        background-color: #2d4336;
+        color: #7ee787;
+        border: 1px solid #238636;
+    }
+
+    .alert-danger {
+        background-color: #3c2f2f;
+        color: #ff7b72;
+        border: 1px solid #f85149;
+    }
+
+    .user-info {
+        background-color: var(--sidebar-color);
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+
+    .user-info h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--sidebar-color);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+        background-color: var(--primary-color);
+        color: #8b949e;
+    }
+
+    tr:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .action-cell {
+        display: flex;
+        gap: 8px;
+    }
+
+    .action-btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: opacity 0.3s;
+    }
+
+    .action-btn:hover {
+        opacity: 0.9;
+    }
+
+    .update-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .delete-btn {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background-color: var(--sidebar-color);
+        padding: 20px;
+        width: 500px;
+        max-width: 90%;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-content label {
+        display: block;
+        margin: 10px 0 5px;
+        color: var(--text-color);
+    }
+
+    .modal-content input {
+        width: 100%;
+        padding: 8px;
+        background-color: var(--primary-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .modal-actions {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .modal-cancel,
+    .modal-save {
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        border: none;
+    }
+
+    .modal-cancel {
+        background-color: #6e7681;
+        color: white;
+        margin-right: 10px;
+    }
+
+    .modal-save {
+        background-color: var(--button-color);
+        color: white;
+    }
+
+    @@media (max-width: 768px) {
+        .dashboard {
+            flex-direction: column;
+        }
+        
+        .sidebar {
+            width: 100%;
+            position: relative;
+            height: auto;
+        }
+        
+        .main-content {
+            margin-left: 0;
+            padding: 20px;
+        }
+    }
+    .user-info {
+    background-color: var(--sidebar-color);
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.user-info h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--button-color);
+    font-size: 18px;
+}
+
+.user-info p {
+    margin: 8px 0;
+    color: var(--text-color);
+}
+
+.user-info strong {
+    color: var(--button-color);
+    margin-right: 5px;
+}
+</style>
+
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <a href="/Home" class="logo">WAF<span id="logo">Security</span></a>
+            <nav>
+                <a href="/Dashboard/Index">Dashboard</a>
+                <a href="/RequestLogs/Index">Request Logs</a>
+                <a href="/RateLimiting/Index">Rate Limiting</a>
+                <a href="/CustomRule/Index">Custom Rules</a>
+                <a href="/UserDomains/Index" class="active">Domains Control</a>
+                <a href="/Settings/Index">Settings</a>
+                <a href="/Account/Logout">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Domains Control</h1>
+                <button class="create-btn" id="addDomainBtn">Add Domain</button>
+            </header>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+<!-- Add this right after the header section and before the table -->
+<div class="user-info">
+        <p><strong>Important:</strong> Please ensure this IP (@Model.IPInstance) address is properly configured in your DNS records (A record) to route traffic correctly to your backend service.</p>
+</div>
+            <table id="domainsTable">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>BackEnd URL</th>
+                        <th>Actions</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.DomainNames != null && Model.DomainNames.Any())
+                    {
+                        foreach (var domain in Model.DomainNames)
+                        {
+                            <tr>
+                                <td>@domain.Domain</td>
+                                <td>@domain.IPAddress</td>
+                                <td class="action-cell">
+                                    <button class="action-btn update-btn" 
+                                            onclick="showUpdateModal(@domain.Id, '@domain.Domain', '@domain.IPAddress')">
+                                        Edit
+                                    </button>
+                                    <form asp-action="RemoveDomain" method="post" style="display: inline;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@domain.Id" />
+                                        <button type="submit" class="action-btn delete-btn">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">No domains configured</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+<!-- Add Domain Form -->
+<div class="modal" id="addDomainModal">
+    <div class="modal-content">
+        <h2>Add New Domain</h2>
+        <form asp-action="AddDomain" method="post">
+            @Html.AntiForgeryToken()
+            <label for="domain">Domain:</label>
+            <input type="text" id="domain" name="Domain" required />
+            
+            <label for="ipAddress">BackEnd URL:</label>
+            <input type="text" id="ipAddress" name="IPAddress" required />
+            
+            <div class="modal-actions">
+                <button type="button" class="modal-cancel" onclick="closeModal('addDomainModal')">Cancel</button>
+                <button type="submit" class="modal-save">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Domain Form -->
+<div class="modal" id="editDomainModal">
+    <div class="modal-content">
+        <h2>Edit Domain</h2>
+        <form asp-action="UpdateDomain" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="editDomainId" name="Id" />
+            
+            <label for="editDomain">Domain:</label>
+            <input type="text" id="editDomain" name="Domain" required />
+            
+            <label for="editIpAddress">IP Address:</label>
+            <input type="text" id="editIpAddress" name="IPAddress" required />
+            
+            <div class="modal-actions">
+                <button type="button" class="modal-cancel" onclick="closeModal('editDomainModal')">Cancel</button>
+                <button type="submit" class="modal-save">Edit</button>
+            </div>
+        </form>
+    </div>
+</div>
+    <script>
+        @* document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('domainModal');
+            const addBtn = document.getElementById('addDomainBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const form = document.getElementById('domainForm');
+            
+            // Hide modal initially
+            modal.style.display = 'none';
+            
+            // Show modal when Add button is clicked
+            addBtn.addEventListener('click', function() {
+                document.getElementById('modalTitle').textContent = 'Add New Domain';
+                document.getElementById('domainId').value = '';
+                document.getElementById('domain').value = '';
+                document.getElementById('ipAddress').value = '';
+                modal.style.display = 'flex';
+            });
+            
+            // Hide modal when Cancel button is clicked
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Handle form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const domainId = document.getElementById('domainId').value;
+                const action = domainId ? 'UpdateDomain' : 'AddDomain';
+                
+                // Create form data
+                const formData = new FormData();
+                formData.append('Id', domainId);
+                formData.append('Domain', document.getElementById('domain').value);
+                formData.append('IPAddress', document.getElementById('ipAddress').value);
+                
+                // Send to server
+                fetch(`/UserDomains/${action}`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Error saving domain');
+                    }
+                });
+            });
+        });
+        
+        function showUpdateModal(id, domain, ipAddress) {
+            const modal = document.getElementById('domainModal');
+            document.getElementById('modalTitle').textContent = 'Edit Domain';
+            document.getElementById('domainId').value = id;
+            document.getElementById('domain').value = domain;
+            document.getElementById('ipAddress').value = ipAddress;
+            modal.style.display = 'flex';
+        } *@
+        // Open Add Domain Modal
+document.getElementById('addDomainBtn').addEventListener('click', function() {
+    document.getElementById('addDomainModal').style.display = 'flex';
+});
+
+// Close any modal
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Open Edit Domain Modal and populate data
+function showUpdateModal(id, domain, ipAddress, aiToggle) {
+    document.getElementById('editDomainId').value = id;
+    document.getElementById('editDomain').value = domain;
+    document.getElementById('editIpAddress').value = ipAddress;
+    document.getElementById('editDomainModal').style.display = 'flex';
+}
+    </script>
+</body>
+</html>

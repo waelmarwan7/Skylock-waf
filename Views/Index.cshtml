@@ -1,0 +1,533 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WAF Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<style>
+        :root {
+        --primary-color: #0d1117;
+        --sidebar-color: #161b22;
+        --button-color: #58a6ff;
+        --secondary-color: #3498db;
+        --accent-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+        --text-color: #c9d1d9;
+        --border-color: #505559;
+    }
+
+    body {
+        background-color: var(--primary-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .dashboard {
+        display: flex;
+        height: 100vh;
+    }
+
+    .logo {
+        padding-bottom: 30px;
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+    }
+
+    .logo span {
+        color: var(--secondary-color);
+    }
+
+    .sidebar {
+        background-color: #161b22;
+        width: 250px;
+        padding: 20px;
+    }
+
+    .sidebar h2 {
+        color: #fff;
+        margin-bottom: 30px;
+        font-size: 20px;
+    }
+
+    .sidebar nav a {
+        display: block;
+        padding: 17px 0;
+        color: #8b949e;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .sidebar nav a.active::before {
+      content: "•"; /* or use "▶" if you prefer */
+      color: #1e90ff;
+      position: absolute;
+      left: 10px;
+    }
+
+
+    .sidebar nav a.active,
+    .sidebar nav a:hover {
+        color: #58a6ff;
+    }
+
+    .main {
+        flex: 1;
+        padding: 30px;
+        overflow-y: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .avatar {
+        font-size: 24px;
+        background: #21262d;
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+
+    .cards {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #161b22;
+        padding: 20px;
+        border-radius: 10px;
+        flex: 1;
+    }
+
+    .card h2 {
+        font-size: 24px;
+        margin: 10px 0 5px;
+    }
+
+    .card span {
+      font-size: 12px;
+      color: #8b949e;
+    }
+
+      .chart {
+        margin: 20px 0;
+      }
+
+      .chart-placeholder {
+        height: 150px;
+        background: #21262d;
+        border-radius: 8px;
+        text-align: center;
+        line-height: 150px;
+        color: #8b949e;
+        font-style: italic;
+      }
+
+      .row {
+        display: flex;
+        gap: 20px;
+      }
+
+      .full {
+        flex: 2;
+      }
+
+      .small {
+        flex: 1;
+      }
+
+      .alerts {
+        list-style: none;
+        padding: 0;
+      }
+
+      .alerts li {
+        padding: 6px 0;
+      }
+
+      .red {
+        color: #ff5c5c;
+      }
+
+      .yellow {
+        color: #f1c40f;
+      }
+      .top-controls {
+        position: absolute;
+        top: 20px;
+        display: flex;
+        gap: 10px;
+        z-index: 1000;
+      }
+
+      /* Default LTR: top-right */
+      body[dir="ltr"] .top-controls {
+        right: 30px;
+        left: auto;
+      }
+
+      /* RTL: top-left */
+      body[dir="rtl"] .top-controls {
+        left: 30px;
+        right: auto;
+      }
+
+      #theme-toggle, #language-toggle {
+        background: #21262d;
+        color: #fff;
+        border: 1px solid #444;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      body.light-mode {
+        background-color: #f0f0f0;
+        color: #222;
+      }
+
+      body.light-mode .sidebar {
+        background-color: #e4e4e4;
+      }
+
+      body.light-mode .main,
+      body.light-mode .card,
+      body.light-mode .chart-placeholder {
+        background-color: #fff;
+        color: #222;
+      }
+
+</style>
+<body dir="ltr">
+    <div class="dashboard">
+        <aside class="sidebar">
+            <a href="home.html" class="logo">WAF<span id="logo">Security</span></a>   
+               <nav>
+                <a class="active">Dashboard</a>
+                <a href="/RequestLogs/Index">Request Logs</a>
+                <a href="/RateLimiting/Index">Rate Limiting</a>
+                <a href="/CustomRule/Index">CustomRule rules</a>
+                @* <a href="/GeoIP/index">Geo & IP Controls</a> *@
+                <a href="/Settings/Index">Settings</a>
+                <a href="/Account/Logout">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="top-controls">
+                <button id="theme-toggle" title="Toggle Dark/Light Mode">🌓</button>
+                <select id="language-toggle" title="Switch Language">
+                    <option value="en" selected>English</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+
+            <header class="header">
+                <h1>WAF Dashboard</h1>
+                <div class="avatar">👤</div>
+            </header>
+            @* TempData["TotalRequests"] = apiResponse?.Allowed + apiResponse?.Blocked_RE + apiResponse?.Blocked_AI; *@
+            @* TempData["Blocked_RE"] = apiResponse?.Blocked_RE; *@
+            @* TempData["Blocked_AI"] = apiResponse?.Blocked_AI; *@
+            <section class="cards">
+                <div class="card">Total Requests <h2></h2><span>today</span></div>
+                <div class="card">Blocked By Rules Engine <h2></h2></div>
+                <div class="card">Blocked By AI <h2></h2></div>
+            </section>
+
+          
+     <section class="chart">
+  <h3>Requests per Minute</h3>
+<canvas id="liveRequestsChart" width="800" height="300"></canvas>
+      </section>
+
+          <section class="row">
+      <!--          <div class="card full">
+                    <h3>Recent Alerts</h3>
+                    <ul class="alerts">
+                        <li><span class="red">✖</span> SQL Injection attempt · <code>203.0.113.5</code></li>
+                        <li><span class="yellow">⚠</span> Detected Rate Limiting · <code>198.51.100.3</code></li>
+                        <li><span class="red">✖</span> Cross-Site Scripting attempt · <code>203.0.113.3</code></li>
+                        <li><span class="yellow">⚠</span> SQL Injection attempt · <code>198.51.100.12</code></li>
+                        <li><span class="red">✖</span> Top Blocked IPs · <code>203.0.113.12</code></li>
+                    </ul>
+                </div>
+
+
+-->
+       <h3>Live Request Distribution</h3>
+<canvas id="pieChart" style="width:100 ; height:100"></canvas>
+
+
+              <div class="card small">
+                  <h3>Top Blocked IPs</h3>
+                  <ul>
+                      @if (ViewData["TopBlockedIPs"] is List<string> topBlockedIPs)
+                      {
+                          foreach (var ip in topBlockedIPs)
+                          {
+                              <li>@ip</li>
+                          }
+                      }
+                      else
+                      {
+                          <li>No data available</li>
+                      }
+                  </ul>
+              </div>
+
+                @* <div class="card small">
+                    <h3>Top Attack Types</h3>
+                    <ul>
+                        <li>SQL Injection</li>
+                        <li>Cross-Site Scripting</li>
+                        <li>Path Traversal</li>
+                    </ul>
+                </div> *@
+            </section>
+        </main>
+    </div>
+    <script>
+        const themeToggle = document.getElementById("theme-toggle");
+        const langToggle = document.getElementById("language-toggle");
+
+        themeToggle.addEventListener("click", () => {
+          document.body.classList.toggle("light-mode");
+        });
+
+        langToggle.addEventListener("change", (e) => {
+          const selectedLang = e.target.value;
+          if (selectedLang === "ar") {
+            document.body.setAttribute("dir", "rtl");
+            document.body.style.fontFamily = "'Segoe UI', 'Cairo', sans-serif";
+            translateToArabic();
+          } else {
+            document.body.setAttribute("dir", "ltr");
+            document.body.style.fontFamily = "'Segoe UI', sans-serif";
+            translateToEnglish();
+          }
+        });
+
+        function translateToArabic() {
+          document.querySelector(".header h1").textContent = "لوحة تحكم WAF";
+          document.querySelectorAll(".card")[0].childNodes[0].nodeValue = "إجمالي الطلبات ";
+          document.querySelectorAll(".card")[1].childNodes[0].nodeValue = "الطلبات المحجوبة ";
+          document.querySelectorAll(".card")[2].childNodes[0].nodeValue = "أعلى عناوين IP المحجوبة ";
+          document.querySelector(".chart h3").textContent = "عدد الطلبات لكل دقيقة";
+          document.querySelector(".full h3").textContent = "التنبيهات الأخيرة";
+          document.querySelectorAll(".small h3")[0].textContent = "أعلى عناوين IP";
+          document.querySelectorAll(".small h3")[1].textContent = "أنواع الهجمات الشائعة";
+        }
+
+        function translateToEnglish() {
+          document.querySelector(".header h1").textContent = "WAF Dashboard";
+          document.querySelectorAll(".card")[0].childNodes[0].nodeValue = "Total Requests ";
+          document.querySelectorAll(".card")[1].childNodes[0].nodeValue = "Blocked Requests ";
+          document.querySelectorAll(".card")[2].childNodes[0].nodeValue = "Top Blocked IPs ";
+          document.querySelector(".chart h3").textContent = "Requests per Minute";
+          document.querySelector(".full h3").textContent = "Recent Alerts";
+          document.querySelectorAll(".small h3")[0].textContent = "Top Blocked IPs";
+          document.querySelectorAll(".small h3")[1].textContent = "Top Attack Types";
+        }
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  initLiveChart();
+  pollRequests();
+  setInterval(pollRequests, 3*1000);
+});
+
+let requestChart;
+let chartLabels = [];
+let allowedData = [];
+let aiData = [];
+let reData = [];
+
+let previous = {
+  allowed: null,
+  ai: null,
+  re: null
+};
+
+function initLiveChart() {
+  const ctx = document.getElementById("liveRequestsChart").getContext("2d");
+
+  requestChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: chartLabels,
+      datasets: [
+        {
+          label: "Allowed RPM",
+          data: allowedData,
+          borderColor: "#4CAF50",
+          backgroundColor: "rgba(76, 175, 80, 0.2)",
+          borderWidth: 2,
+          pointRadius: 4,
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: "Blocked by AI RPM",
+          data: aiData,
+         borderColor: "blue",
+           backgroundColor: "rgba(33, 150, 243, 0.2)", // light blue fill
+          borderWidth: 2,
+          pointRadius: 4,
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: "Blocked by RE RPM",
+          data: reData,
+             borderColor: "#F44336",
+          backgroundColor: "rgba(244, 67, 54, 0.2)",
+        
+          borderWidth: 2,
+          pointRadius: 4,
+          tension: 0.3,
+          fill: true
+        }
+      ]
+    },
+    options: {
+      animation: false,
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true },
+        x: { ticks: { maxTicksLimit: 10 } }
+      }
+    }
+  });
+
+   
+}
+
+async function pollRequests() {
+  try {
+    const res = await fetch("/Dashboard/RequestServer");
+    const data3 = await res.json();
+document.querySelectorAll(".cards .card h2")[0].textContent = data3["Allowed"]+data3["Blocked_RE"]+data3["Blocked_AI"];
+document.querySelectorAll(".cards .card h2")[1].textContent = data3["Blocked_RE"];
+document.querySelectorAll(".cards .card h2")[2].textContent = data3["Blocked_AI"];
+
+console.log(data3.All)
+    const now = new Date();
+    const timeLabel = now.toLocaleTimeString([], { minute: "2-digit", second: "2-digit" });
+
+    const rpmAllowed = calculateRPM("allowed",data3["Allowed"]);
+    const rpmAI = calculateRPM("ai", data3["Blocked_RE"]);
+    const rpmRE = calculateRPM("re", data3["Blocked_AI"]);
+
+    chartLabels.push(timeLabel);
+    allowedData.push(rpmAllowed);
+    aiData.push(rpmAI);
+    reData.push(rpmRE);
+
+    // keep max 30 points
+    if (chartLabels.length > 30) {
+      chartLabels.shift();
+      allowedData.shift();
+      aiData.shift();
+      reData.shift();
+    }
+
+    requestChart.update();
+  } catch (err) {
+    console.error("Failed to poll data:", err);
+  }
+}
+
+function calculateRPM(key, newTotal) {
+  if (previous[key] === null) {
+    previous[key] = newTotal;
+    return 0;
+  }
+  const rpm = newTotal - previous[key];
+  previous[key] = newTotal;
+  return rpm/20;
+}
+</script>
+<script>
+let pieChart;
+
+function initPieChart() {
+  const ctx = document.getElementById('pieChart').getContext('2d');
+  pieChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Allowed Requests', 'Blocked Requests'],
+      datasets: [{
+        data: [0, 0],
+        backgroundColor: ['#4CAF50', '#F44336'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top'
+        }
+      }
+    }
+  });
+}
+
+async function updatePieChart() {
+  try {
+        const res = await fetch("/Dashboard/RequestServer");
+    const data2 = await res.json();
+
+    pieChart.data.datasets[0].data = [data2["Allowed"], data2["Blocked_RE"]+data2["Blocked_AI"]];
+    pieChart.update();
+  } catch (error) {
+    console.error('Failed to fetch pie chart data:', error);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  initPieChart();
+  updatePieChart();
+  setInterval(updatePieChart, 5000); // update every 5s
+});
+
+async function loadTopBlockedIPs() {
+  try {
+    const res = await fetch("/Dashboard/TopBlocked");
+    const data = await res.json();
+
+    const list = document.getElementById("topBlockedList");
+    list.innerHTML = "";
+
+    if (data.length === 0) {
+      list.innerHTML = "<li>No data available</li>";
+      return;
+    }
+
+    data.forEach(entry => {
+      const item = document.createElement("li");
+      item.textContent = `${entry.ip} - ${entry.count}`;
+      list.appendChild(item);
+    });
+  } catch (err) {
+    console.error("Failed to load top blocked IPs:", err);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadTopBlockedIPs();
+  setInterval(loadTopBlockedIPs, 10000); // refresh every 10s
+});
+</script>
+
+</body>
+</html>

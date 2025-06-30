@@ -1,0 +1,408 @@
+﻿@model List<CustomRule>
+@{
+
+    ViewData["Title"] = "Rules & Filters";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Rules & Filters</title>
+    <link rel="stylesheet" href="rules.css" />
+    <style>
+        :root {
+        --primary-color: #0d1117;
+        --sidebar-color: #161b22;
+        --button-color: #58a6ff;
+        --secondary-color: #3498db;
+        --accent-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+        --text-color: #c9d1d9;
+        --border-color: #505559;
+        }
+
+        body {
+        background-color: var(--primary-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', sans-serif;
+        }
+
+        .dashboard {
+        display: flex;
+        height: 100vh;
+        }
+
+        .logo {
+        padding-bottom: 30px;
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+        }
+
+        .logo span {
+        color: var(--secondary-color);
+        }
+
+        .sidebar {
+        width: 250px;
+        background: #161b22;
+        padding: 20px;
+        }
+
+        .sidebar h2 {
+        color: white;
+        font-size: 20px;
+        margin-bottom: 30px;
+        }
+
+        .sidebar nav a {
+        display: block;
+        padding: 17px 0;
+        color: #8b949e;
+        text-decoration: none;
+        font-size: 17px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #2d4336;
+            color: #7ee787;
+            border: 1px solid #238636;
+        }
+
+        .alert-danger {
+            background-color: #3c2f2f;
+            color: #ff7b72;
+            border: 1px solid #f85149;
+        }
+
+
+        .sidebar nav a.active::before {
+        content: "•"; /* or use "▶" if you prefer */
+        color: #1e90ff;
+        position: absolute;
+        left: 10px;
+        }
+
+
+        .sidebar nav a.active,
+        .sidebar nav a:hover {
+        color: #58a6ff;
+        }
+
+        .main-content {
+        flex: 1;
+        padding: 30px;
+        }
+
+        header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        }
+
+        .create-btn {
+        background-color: #3470DCff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        }
+
+        table {
+        width: 100%;
+        margin-top: 30px;
+        border-collapse: collapse;
+        background-color: #161b22;
+        border-radius: 8px;
+        overflow: hidden;
+        }
+
+        th, td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #21262d;
+        font-size: 14px;
+        }
+
+        th {
+        color: #8b949e;
+        text-align: left;
+        background-color: #0d1117;
+        }
+
+        tr:hover {
+        background-color: #21262d;
+        }
+
+        .pill {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        display: inline-block;
+        }
+
+        .pill.block {
+        background-color: #3c2f2f;
+        color: #ff7b72;
+        }
+
+        .pill.allow {
+        background-color: #2d4336;
+        color: #7ee787;
+        }
+
+        .status.enabled {
+        color: #58a6ff;
+        font-weight: bold;
+        }
+
+        .status.disabled {
+        color: #8b949e;
+        font-weight:  bold;
+        }
+
+        .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        }
+
+        .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        width: 400px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .modal-content label {
+        display: block;
+        margin: 10px 0 5px;
+        }
+
+        .modal-content input,
+        .modal-content select {
+        width: 100%;
+        padding: 5px;
+        }
+
+        .modal-actions {
+        margin-top: 15px;
+        text-align: right;
+        }
+
+        .modal-actions button {
+        margin-left: 10px;
+        }
+
+        .delete-btn {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        }
+
+        .delete-btn:hover {
+        background-color: #d32f2f;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .update-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <a href="/Home" class="logo">WAF<span id="logo">Security</span></a>
+               <nav>
+                <a href="/Dashboard/Index">Dashboard</a>
+                <a href="/RequestLogs/Index">Request Logs</a>
+                <a href="/RateLimiting/Index">Rate Limiting</a>
+                <a href="/CustomRule/Index">CustomRule rules</a>
+                <a href="/UserDomains/Index">Domains Control</a>
+                <a href="/Settings/Index">Settings</a>
+                <a href="/Account/Logout">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Rules & Filters</h1>
+                <button class="create-btn" id="createBtn">Create</button>
+            </header>
+            <!-- Add the message display here -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+            <table id="rulesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Method</th>
+                        <th>Location</th>
+                        <th>Regex</th>
+                        <th>Last Updated</th>
+                        <th>Action</th>
+                    </tr>
+                    
+                        @foreach(CustomRule item in Model)
+                        {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Name</td>
+                            <td>@item.Method</td>
+                            <td>@item.Location</td>
+                            <td>@item.Regex</td>
+                            <td>@item.UpdatedAt</td>
+                            <td class="action-cell">
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    <button type="submit" class="action-btn delete-btn">Delete</button>
+                                </form>
+                                <button class="action-btn update-btn"
+                                        onclick="showUpdateModal(@item.Id, '@item.Name', '@item.Method', '@item.Location', '@item.Regex')">
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    
+                </thead>
+                <tbody>
+                    <!-- Rules will be added here via JavaScript -->
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Create Rule</h2>
+
+            <form asp-action="CreateRule" method="post">
+                <input type="hidden" id="ruleId" name="Id" />
+
+                <label for="ruleName">Rule Name:</label>
+                <input type="text" id="ruleName" name="Name" required />
+
+                <label for="method">Method:</label>
+                <select id="method" name="Method" required>
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                    <option value="ANY">ANY</option>
+                </select>
+
+                <label for="location">Location:</label>
+                <select id="location" name="Location" required>
+                    <option value="URI">URI</option>
+                    <option value="Headers">Headers</option>
+                    <option value="Body">Body</option>
+                </select>
+
+                <label for="regex">Regex:</label>
+                <input type="text" id="regex" name="Regex" required />
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelBtn">Cancel</button>
+                    <button type="submit" id="saveBtn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('modal');
+            const createBtn = document.getElementById('createBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const form = document.querySelector('#modal form');
+
+            // Hide modal initially
+            modal.style.display = 'none';
+
+            // Show modal when Create button is clicked
+            createBtn.addEventListener('click', function() {
+                modal.style.display = 'flex';
+            });
+
+            // Hide modal when Cancel button is clicked
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            // Hide modal after form submission
+            form.addEventListener('submit', function() {
+                modal.style.display = 'none';
+            });
+        });
+            // Add this to your existing script
+        function showUpdateModal(id, name, method, location, regex) {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+
+            // Set modal title and populate fields
+            modalTitle.textContent = "Update Rule";
+            document.getElementById('ruleId').value = id;
+            document.getElementById('ruleName').value = name;
+            document.getElementById('method').value = method;
+            document.getElementById('location').value = location;
+            document.getElementById('regex').value = regex;
+
+            // Show the modal
+            modal.style.display = 'flex';
+        }
+
+        // Modify your form submission to handle both create and update
+        document.querySelector('#modal form').addEventListener('submit', function(e) {
+            const ruleId = document.getElementById('ruleId').value;
+            const action = ruleId ? 'UpdateRule' : 'CreateRule';
+            this.action = `/CustomRule/${action}`;
+        });
+    </script>
+  </body>
+</html>

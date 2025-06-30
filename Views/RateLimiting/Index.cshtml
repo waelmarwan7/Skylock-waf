@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rate Limiting</title>
+
+</head>
+<style>
+:root {
+  --primary-color: #0d1117;
+  --sidebar-color: #161b22;
+  --button-color: #58a6ff;
+  --secondary-color: #3498db;
+  --accent-color: #e74c3c;
+  --light-color: #ecf0f1;
+  --dark-color: #2c3e50;
+  --text-color: #c9d1d9;
+  --border-color: #505559;
+}
+
+body {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.logo {
+  padding-bottom: 30px;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.logo span {
+  color: var(--secondary-color);
+}
+
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+
+  .sidebar {
+    width: 250px;
+    background: #161b22;
+    padding: 20px;
+  }
+   
+  .sidebar h2 {
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+
+.sidebar nav a {
+  display: block;
+  padding: 17px 0;
+  color: #8b949e;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.sidebar nav a.active::before {
+  content: "•"; /* or use "▶" if you prefer */
+  color: #1e90ff;
+  position: absolute;
+  left: 10px;
+}
+
+   
+  .sidebar nav a.active,
+  .sidebar nav a:hover {
+    color: #58a6ff;
+  }
+   
+  .content {
+    flex: 1;
+    padding: 30px;
+  }
+   
+  .content h1 {
+    margin-bottom: 20px;
+  }
+   
+  .card {
+    background-color: #161b22;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 400px;
+  }
+   
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    vertical-align: middle;
+  }
+   
+  .toggle-switch input {
+    display: none;
+  }
+   
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    background-color: #444c56;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+   
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px; width: 18px;
+    left: 4px; bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+   
+  .toggle-switch input:checked + .slider {
+    background-color: #238636;
+  }
+   
+  .toggle-switch input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+   
+  .toggle-label {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+   
+  form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+   
+  form label {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+   
+  form input {
+    padding: 10px;
+    background: #0d1117;
+    color: white;
+    border: 1px solid #30363d;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+   
+  form button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #58a6ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("rateLimitForm");
+    const rpmInput = document.getElementById("rpm");
+    const burstInput = document.getElementById("burst");
+    const enabledCheckbox = document.getElementById("enabled");
+
+    rpmInput.addEventListener("input", function () {
+        if (this.value > 1000) this.value = 1000;
+    });
+
+    burstInput.addEventListener("input", function () {
+        if (this.value > 100) this.value = 100;
+    });
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault(); // Prevent form refresh
+
+        //const isEnabled = enabledCheckbox.checked;
+
+    // Build data to send
+  const data = {
+    rate: rpmInput.value + "r/m", // or "r/s" depending on your logic
+    burst: parseInt(burstInput.value)
+};
+
+        try {
+            const response = await fetch("/RateLimiting/Submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+           
+
+
+            const result = await response.json();
+console.log("Received response:", result);
+console.log("Message:", result.message);
+          
+            alert(result.message || "Submitted successfully!");
+        } catch (error) {
+            alert("Failed to submit settings.");
+            console.error(error);
+        }
+    });
+});
+</script>
+
+
+<body>
+    <div class="container">
+       <aside class="sidebar">
+            <a href="home.html" class="logo">WAF<span id="logo">Security</span></a>  
+               <nav>
+                <a href="/Dashboard/Index">Dashboard</a>
+                <a href="/RequestLogs/Index">Request Logs</a>
+                <a href="/RateLimiting/Index">Rate Limiting</a>
+                <a href="/CustomRule/Index">CustomRule rules</a>
+                <a href="/UserDomains/Index">Domains Control</a>
+                <a href="/Settings/Index">Settings</a>
+                <a href="/Account/Logout">Logout</a>
+            </nav>
+        </aside>
+        <main class="content">
+            <h1>Rate Limiting</h1>
+            <div class="card">
+           
+                        <form id="rateLimitForm">
+            <label for="rpm">Requests per Minute</label>
+            <input type="number" id="rpm" value="50" max="1000">
+
+            <label for="burst">Burst Capacity</label>
+            <input type="number" id="burst" value="50" max="100">
+
+            <button type="submit">Apply</button>
+                </form>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>ط
