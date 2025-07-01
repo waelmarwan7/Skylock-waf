@@ -1,0 +1,17 @@
+Generate a New Service Account Key (If Compromised) If the key was exposed in Git history: Go to Google Cloud Console
+
+Navigate to IAM & Admin → Service Accounts
+
+Select your service account → Keys tab
+
+Delete the exposed key (click 🗑️)
+
+Create new key:
+
+Click + Create Key → JSON
+
+The key file will download automatically
+
+#Activate for current session gcloud auth activate-service-account --key-file=service-account.json
+
+#set google cloud project defualt on the server gcloud config set project PROJECT_ID
