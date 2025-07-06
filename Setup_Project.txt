@@ -1,22 +1,41 @@
-Generate a New Service Account Key (If Compromised) If the key was exposed in Git history: Go to Google Cloud Console
+##create instance with name= Home-waf-page
 
+#Generate a New Service Account Key (If Compromised) If the key was exposed in Git history: Go to Google Cloud Console
 Navigate to IAM & Admin → Service Accounts
-
 Select your service account → Keys tab
-
 Delete the exposed key (click 🗑️)
-
 Create new key:
-
 Click + Create Key → JSON
-
 The key file will download automatically
 
-#Activate for current session gcloud auth activate-service-account --key-file=service-account.json
-
-#set google cloud project defualt on the server gcloud config set project PROJECT_ID
-
-
+#download the image from google drive in your local.
 #copy the downloaded instance image to your google bucket in your project. 
-gsutil -d cp "C:\GCP_Images\image-final.gz" gs://YOUR-NAME-BUCKET/
+gsutil -d cp "YOUR/FILE/LOCATION" gs://YOUR-NAME-BUCKET/
+
+#import the image in the compute images
+gcloud compute images create final-image --source-uri=gs://YOUR-BUCKET-NAME/final-image-export.tar.gz --storage-location=us-central1
+
+
+
+
+
+##use this command in home-waf-page server in google sdk
+
+#copy the folder skylock from this repo to the windows server
+
+#put the service-account key file in the folder
+
+#Activate the service account on the home-page-server
+gcloud auth activate-service-account --key-file=service-account.json
+
+#set google cloud project defualt on the server
+gcloud config set project PROJECT_ID
+
+# put ssl certificate inside the folder also.
+
+#finally run the project by copy this command in cmd inside folder location
+dotnet run
+
+
+
 
