@@ -15,3 +15,8 @@ The key file will download automatically
 #Activate for current session gcloud auth activate-service-account --key-file=service-account.json
 
 #set google cloud project defualt on the server gcloud config set project PROJECT_ID
+
+
+#copy the downloaded instance image to your google bucket in your project. 
+gsutil -d cp "C:\GCP_Images\image-final.gz" gs://YOUR-NAME-BUCKET/
+
