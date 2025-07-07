@@ -8,7 +8,9 @@
 
 [https://hacktricks.boitatech.com.br/shells/shells/full-ttys](https://hacktricks.boitatech.com.br/shells/shells/full-ttys)
 
-```(inside nc session) Ctrl+Z ; stty raw -echo ; fg ; fg ; export TERM=xterm```
+```bash
+(inside nc session) Ctrl+Z ; stty raw -echo ; fg ; fg ; export TERM=xterm
+```
 
 ## Methodology
 
