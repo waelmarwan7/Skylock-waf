@@ -30,7 +30,7 @@ gsutil -d cp "YOUR/FILE/LOCATION" gs://YOUR-NAME-BUCKET/
 
 ### Import the image in the compute images
 ```bash
-gcloud compute images create final-image --source-uri=gs://YOUR-BUCKET-NAME/final-image-export.tar.gz --storage-location=us-central1
+gcloud compute images create final-image --source-uri=gs://YOUR-BUCKET-NAME/my-image-export.tar.gz --storage-location=us-central1
 ```
 
 > Use this command in home-waf-page server in google sdk
