@@ -22,7 +22,7 @@
 ### Download the image from google drive in your local.
 >[System image Link](https://drive.google.com/file/d/1FExwSmgswaue6Ygw_5T2fkShns-ckD_E/view?usp=sharing](https://drive.google.com/file/d/1XtX9uBUTntPDa3CXv7CdmXowPeqtMa_u/view?usp=sharing )
 
-###copy the downloaded instance image to your google bucket in your project.
+### copy the downloaded instance image to your google bucket in your project.
   
 ```bash
 gsutil -d cp "YOUR/FILE/LOCATION" gs://YOUR-NAME-BUCKET/
