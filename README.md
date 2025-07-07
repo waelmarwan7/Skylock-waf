@@ -11,7 +11,7 @@
 
 ### Create Instance named "Home-waf-page"
 
-- Generate a New Service Account Key (If Compromised) If the key was exposed in Git history: Go to Google Cloud Console
+### Generate a New Service Account Key (If Compromised) If the key was exposed in Git history: Go to Google Cloud Console
 - Navigate to IAM & Admin → Service Accounts
 - Select your service account → Keys tab
 - Delete the exposed key (click 🗑️)
@@ -33,7 +33,7 @@ gsutil -d cp "YOUR/FILE/LOCATION" gs://YOUR-NAME-BUCKET/
 gcloud compute images create final-image --source-uri=gs://YOUR-BUCKET-NAME/my-image-export.tar.gz --storage-location=us-central1
 ```
 
-> Use this command in home-waf-page server in google sdk
+> Use this commands in home-waf-page server in google sdk
 
 - Copy the folder skylock from this repo to the windows server
 - Put the service-account key file in the folder
