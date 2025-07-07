@@ -4,7 +4,7 @@
 
 [https://www.revshells.com/](https://www.revshells.com/) → **Online Shell Generator (one line)** but search google better
 
-[cheat-sheet Link](https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet) → ==**One Liner Shells**==
+[cheat-sheet Link](https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet) → **One Liner Shells**
 
 [https://hacktricks.boitatech.com.br/shells/shells/full-ttys](https://hacktricks.boitatech.com.br/shells/shells/full-ttys)
 
